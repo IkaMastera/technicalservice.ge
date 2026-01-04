@@ -78,7 +78,6 @@ export default function Header() {
   const closeMenu = useCallback(() => setOpen(false), []);
   const toggleMenu = useCallback(() => setOpen((v) => !v), []);
 
-  // ✅ Close on route change (deps stable, no changing array size)
   const prevPathRef = useRef<string | null>(null);
 
     useEffect(() => {
@@ -86,8 +85,8 @@ export default function Header() {
     prevPathRef.current = pathname;
 
     if (!open) return;
-    if (prev === null) return;     // first mount
-    if (prev === pathname) return; // not a navigation
+    if (prev === null) return;
+    if (prev === pathname) return;
 
     const id = window.setTimeout(() => setOpen(false), 0);
     return () => window.clearTimeout(id);

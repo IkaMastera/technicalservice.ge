@@ -63,7 +63,6 @@ body {
     top: 80%;
   }
 
-  /* ✅ Hover effect only for devices that actually support hover */
   @media (hover: hover) and (pointer: fine) {
     .button-primary:hover::before,
     .button-primary:hover::after {
@@ -75,18 +74,15 @@ body {
     }
   }
 
-  /* ✅ Mobile “press” feedback */
   .button-primary:active {
     transform: scale(0.98);
   }
 
-  /* ✅ Keyboard accessibility */
   .button-primary:focus-visible {
     outline: 2px solid rgba(47, 107, 255, 0.7);
     outline-offset: 3px;
   }
 
-  /* ✅ Full-width mode for mobile menus (we’ll use this class) */
   .button-primary--full {
     width: 100%;
   }
