@@ -32,8 +32,8 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
       type="button"
       className={cx(
         "md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl",
-        "border border-white/10 bg-[#121926] text-[#EAF1FF]",
-        "hover:bg-white/[0.04] active:scale-[0.98] transition"
+        "border border-white/10 bg-surface text-text",
+        "hover:bg-white/4 active:scale-[0.98] transition"
       )}
       aria-label={open ? "Close menu" : "Open menu"}
       aria-expanded={open}
@@ -45,15 +45,15 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
         {/* top */}
         <span
           className={cx(
-            "absolute left-0 top-0 h-[2px] w-full rounded-full bg-current",
+            "absolute left-0 top-0 h-0.5 w-full rounded-full bg-current",
             "transition-transform duration-200 ease-out",
-            open && "translate-y-[7px] rotate-45"
+            open && "translate-y-1.75 rotate-45"
           )}
         />
         {/* middle */}
         <span
           className={cx(
-            "absolute left-0 top-[7px] h-[2px] w-full rounded-full bg-current",
+            "absolute left-0 top-1.75 h-0.5 w-full rounded-full bg-current",
             "transition-opacity duration-150 ease-out",
             open && "opacity-0"
           )}
@@ -61,9 +61,9 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
         {/* bottom */}
         <span
           className={cx(
-            "absolute left-0 top-[14px] h-[2px] w-full rounded-full bg-current",
+            "absolute left-0 top-3.5 h-0.5 w-full rounded-full bg-current",
             "transition-transform duration-200 ease-out",
-            open && "-translate-y-[7px] -rotate-45"
+            open && "-translate-y-1.75 -rotate-45"
           )}
         />
       </span>
@@ -104,7 +104,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="relative border-b border-white/10 bg-[#0B0F14]">
+      <div className="relative border-b border-white/10 bg-bg">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.16]"
           aria-hidden="true"
@@ -124,12 +124,12 @@ export default function Header() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
           {/* Brand */}
           <Link href="/en" className="flex items-center gap-3" aria-label="Go to home">
-            <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-[#121926]">
+            <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-surface">
               <TscLogo className="h-7 w-auto text-[#2F6BFF]" />
             </span>
 
             <div className="leading-tight">
-              <div className="text-sm font-semibold text-[#EAF1FF]">Technical Service Company</div>
+              <div className="text-sm font-semibold text-text">Technical Service Company</div>
             </div>
           </Link>
 
@@ -143,14 +143,14 @@ export default function Header() {
                   href={item.href}
                   className={cx(
                     "relative rounded-lg px-3 py-2 text-sm transition",
-                    "text-[#9FB0C8] hover:text-[#EAF1FF] hover:bg-white/[0.04]",
-                    active && "text-[#EAF1FF]"
+                    "text-muted hover:text-text hover:bg-white/4",
+                    active && "text-text"
                   )}
                   aria-current={active ? "page" : undefined}
                 >
                   {item.label}
                   {active && (
-                    <span className="absolute left-3 right-3 top-[calc(100%+6px)] h-[2px] rounded-full bg-[#FFB020]" />
+                    <span className="absolute left-3 right-3 top-[calc(100%+6px)] h-0.5 rounded-full bg-accent" />
                   )}
                 </Link>
               );
@@ -182,7 +182,7 @@ export default function Header() {
           <>
             <motion.button
               type="button"
-              className="fixed left-0 right-0 top-[68px] z-[70] md:hidden"
+              className="fixed left-0 right-0 top-17 z-70 md:hidden"
               aria-label="Close menu overlay"
               onClick={closeMenu}
               initial={{ opacity: 0 }}
@@ -191,13 +191,13 @@ export default function Header() {
             />
 
             <motion.div
-              className="fixed left-0 right-0 top-[68px] z-50 md:hidden"
+              className="fixed left-0 right-0 top-17 z-50 md:hidden"
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.16 }}
             >
-              <div className="mx-4 rounded-2xl border border-white/10 bg-[#121926] shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
+              <div className="mx-4 rounded-2xl border border-white/10 bg-surface shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
                 <nav className="flex flex-col p-2" aria-label="Mobile navigation">
                   {NAV.map((item) => {
                     const active = isActive(pathname, item.href);
@@ -209,13 +209,13 @@ export default function Header() {
                         className={cx(
                           "flex items-center justify-between rounded-xl px-3 py-3 text-sm transition",
                           active
-                            ? "bg-white/[0.06] text-[#EAF1FF]"
-                            : "text-[#9FB0C8] hover:bg-white/[0.04] hover:text-[#EAF1FF]"
+                            ? "bg-white/6 text-text"
+                            : "text-muted hover:bg-white/4 hover:text-text"
                         )}
                         aria-current={active ? "page" : undefined}
                       >
                         <span>{item.label}</span>
-                        {active && <span className="h-2 w-2 rounded-full bg-[#FFB020]" aria-hidden="true" />}
+                        {active && <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />}
                       </Link>
                     );
                   })}

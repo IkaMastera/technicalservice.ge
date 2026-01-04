@@ -101,3 +101,39 @@ body {
     }
   }
 }
+
+/* Main Page Hero Section Helper */
+@layer utilities {
+  .button-primary--full {
+    width: 100%;
+  }
+  .button-primary--auto {
+    width: 10em;
+  }
+}
+
+/* HERO BUTTON OVERRIDE */
+@layer utilities {
+  .button-primary--hero {
+    background-color: rgba(18, 25, 38, 0.85);
+    color: #EAF1FF;
+    border: 1px solid rgba(255, 176, 32, 0.55);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .button-primary--hero::before,
+  .button-primary--hero::after {
+    display: none;
+  }
+  .button-primary--hero:hover {
+    background-color: rgba(255, 176, 32, 0.12);
+    border-color: #FFB020;
+    color: #FFB020;
+    transform: translateY(-1px);
+  }
+
+  .button-primary--hero:active {
+    background-color: rgba(255, 176, 32, 0.18);
+    transform: scale(0.98);
+  }
+}
