@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { ButtonPrimary } from "../ui/button-primary";
 import TscLogo from "../brand/tsc-logo";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 const NAV = [
   { label: "Home", href: "/en" },
@@ -104,7 +105,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="relative border-b border-white/10 bg-bg">
+      <div className="relative border-b border-white/10 bg-header">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.16]"
           aria-hidden="true"
@@ -170,6 +171,8 @@ export default function Header() {
                 </Link>
                </ButtonPrimary>
             </div>
+
+            <ThemeToggle />
 
             <BurgerButton open={open} onClick={toggleMenu} />
           </div>
