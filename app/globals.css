@@ -1,48 +1,49 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0C0E11;
-  --color-surface: #13161B;
-  --color-surface2: #1A1E24;
+  /* Base canvas  NOT black */
+  --color-bg: #2A3446;
 
-  --color-text: #E6ECF3;
-  --color-muted: #9AA4B2;
+  /* Surfaces  lighter than bg */
+  --color-surface: #323E54;
+  --color-surface2: #3A4861;
 
-  --color-border: rgba(255, 255, 255, 0.08);
+  /* Text */
+  --color-text: #F0F4FB;
+  --color-muted: #C2CCDD;
 
-  --color-accent: #F5B301;
-  --color-accent2: #3E556E;
+  /* Borders */
+  --color-border: rgba(255,255,255,0.18);
+
+  /* Accents */
+  --color-accent: #FFB020;
+  --color-accent2: #3A74FF;
 
   /* Header */
-  --color-header: var(--color-bg);
+  --color-header: #263044;
   --color-headerTint: rgba(255,255,255,0.06);
-  --color-headerBorder: rgba(255,255,255,0.10);
+  --color-headerBorder: rgba(255,255,255,0.20);
 }
 
 /* Light Mode  */
 :root[data-theme="light"] {
-  /* Base backgrounds */
-  --color-bg: #F5F7FA;          /* neutral CAD canvas */
-  --color-surface: #FFFFFF;     /* cards / content */
-  --color-surface2: #E9EDF2;    /* panels / tables */
+  --color-bg: #F4F3F1;        
+  --color-surface: #FFFFFF;
+  --color-surface2: #EEEAE5;
 
-  /* Text */
-  --color-text: #0E1621;        /* near-black graphite */
-  --color-muted: #556273;       /* technical gray */
+  --color-text: #141414;
+  --color-muted: #5B5B5B;
 
-  /* Borders / dividers */
-  --color-border: rgba(14, 22, 33, 0.14);
+  --color-border: rgba(20, 20, 20, 0.12);
 
-  /* Primary brand */
-  --color-accent: #F5B301;      /* safety amber (keep) */
+  --color-accent: #B45309;    /* copper */
+  --color-accent2: #334155;   /* graphite-blue */
 
-  --color-accent2: #1F4FD8;
-  --color-success: #2F8F6B;
+  --color-success: #1F7A5B;
 
-  /* Header (CRITICAL) */
-  --color-header: #EDF1F6;      /* not white */
-  --color-headerTint: rgba(14, 22, 33, 0.04);
-  --color-headerBorder: rgba(14, 22, 33, 0.12);
+  --color-header: #F1EFEC;
+  --color-headerTint: rgba(180, 83, 9, 0.05);
+  --color-headerBorder: rgba(20, 20, 20, 0.10);
 }
 
 html,

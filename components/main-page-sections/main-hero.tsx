@@ -113,15 +113,26 @@ export default function HeroVideo({
 
           {/* Actions */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <ButtonPrimary className="button-primary--hero button-primary--full sm:button-primary--auto">
-                <Link href="/en/contact" className="block w-full text-center">
-                    Request Quote
-                </Link>
+            <ButtonPrimary className="button-primary--hero w-full sm:w-auto">
+              <Link href="/en/contact" className="block w-full text-center">
+                Request Quote
+              </Link>
             </ButtonPrimary>
-
+            
             <Link
               href="/en/portfolio"
-              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/4 px-4 py-2.5 text-sm font-semibold text-text transition hover:bg-white/6 active:scale-[0.98]"
+              className="
+                inline-flex w-full items-center justify-center
+                rounded-xl
+                border border-white/15
+                bg-white/5
+                px-6 py-3
+                text-sm font-semibold text-text
+                transition
+                hover:bg-white/8
+                active:scale-[0.98]
+                sm:w-auto
+              "
             >
               View Portfolio
             </Link>

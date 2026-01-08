@@ -1,21 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 25.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:url(#SVGID_1_);}
-</style>
-<g>
-	<radialGradient id="SVGID_1_" cx="-4.9355" cy="-12.6774" r="525.2668" gradientUnits="userSpaceOnUse">
-		<stop  offset="0" style="stop-color:#0A38FD"/>
-		<stop  offset="0.2308" style="stop-color:#0A38FA"/>
-		<stop  offset="0.4148" style="stop-color:#0A37F0"/>
-		<stop  offset="0.5826" style="stop-color:#0B36DF"/>
-		<stop  offset="0.7409" style="stop-color:#0B35C7"/>
-		<stop  offset="0.891" style="stop-color:#0C33A9"/>
-		<stop  offset="1" style="stop-color:#0C318E"/>
-	</radialGradient>
-	<path class="st0" d="M464,512c-7.9-3.1-14.7-7.4-18.4-15.7c-0.5-1-3.5-1.3-5.3-1.3c-38.5-0.1-77-0.1-115.5,0
+import * as React from "react";
+
+type Props = React.SVGProps<SVGSVGElement> & { title?: string };
+
+export default function PlumbingIcon({
+  title = "Plumbing system",
+  ...props
+}: Props) {
+  return (
+    <svg viewBox="0 0 512 512" role="img" aria-label={title} {...props}>
+      <title>{title}</title>
+      <g fill="currentColor">
+        <path d="M464,512c-7.9-3.1-14.7-7.4-18.4-15.7c-0.5-1-3.5-1.3-5.3-1.3c-38.5-0.1-77-0.1-115.5,0
 		c-23.6,0.1-46.5-3.9-67.9-14.1c-52.4-24.9-83.7-65.9-93-123.3c-1.3-8.3-1.7-16.9-1.8-25.4c-0.2-21.5-0.1-43,0-64.5
 		c0-3.2-0.7-5-3.7-6.6c-8.8-4.7-13.4-12.4-13.3-22.4c0.1-9.8,4.6-17.3,13.2-21.9c3-1.6,3.8-3.3,3.8-6.5c-0.2-15.7-0.1-31.3-0.1-47
 		c0-7.9-1.7-9.6-9.7-9.6c-36,0-72,0-108,0c-2.8,0-5.7,0-8.5,0c-12.1-0.2-18.9-7-18.9-19.1c0-38.5,0-77,0-115.5C17,6.8,23.8,0,36.2,0
@@ -33,5 +28,7 @@
 		C460.9,373.6,460.9,395.9,460.9,418.3z M239.1,247.4c22.2,0,44.3,0,66.5,0c6.4,0,10.2-3.4,10.2-8.5s-3.9-8.3-10.3-8.5
 		c-0.7,0-1.3,0-2,0c-43,0-86,0-129,0c-1.8,0-3.7,0-5.5,0.4c-4.3,0.8-7.1,4.4-6.9,8.5c0.2,4.1,3.2,7.4,7.5,8c1.8,0.2,3.7,0.2,5.5,0.2
 		C196.4,247.5,217.8,247.5,239.1,247.4z"/>
-</g>
-</svg>
+      </g>
+    </svg>
+  );
+}

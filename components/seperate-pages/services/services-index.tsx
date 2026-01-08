@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { SERVICES } from "@/data/services";
@@ -162,6 +161,8 @@ export default function ServicesIndex() {
         >
           {filtered.map((s) => {
             const cat = CATEGORY_BY_SLUG[s.slug] ?? "General";
+            const Icon = s.Icon;
+
             return (
               <motion.div key={s.slug} variants={item} layout>
                 <Link
@@ -180,12 +181,16 @@ export default function ServicesIndex() {
                           "transition-transform duration-200 group-hover:-translate-y-0.5"
                         )}
                       >
-                        <Image
-                          src={s.icon}
-                          alt={`${s.title} icon`}
-                          width={36}
-                          height={36}
-                          className="h-9 w-9"
+                        <Icon
+                          aria-hidden="true"
+                          focusable="false"
+                          className={cx(
+                            "h-9 w-9",
+                            "text-muted",
+                            "transition-transform duration-200 ease-out",
+                            "group-hover:-translate-y-0.5 group-hover:scale-[1.04]",
+                            "group-hover:text-accent"
+                          )}
                         />
                       </div>
 

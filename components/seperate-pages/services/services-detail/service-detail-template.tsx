@@ -10,22 +10,25 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
+import { SERVICES } from "@/data/services";
+
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
 export default function ServiceDetailTemplate({
   title,
-  icon,
   slug,
   images,
 }: {
   title: string;
-  icon: string;
   slug: string;
   images: string[];
 }) {
   const reduce = useReducedMotion();
+
+  const service = useMemo(() => SERVICES.find((x) => x.slug === slug), [slug]);
+  const Icon = service?.Icon;
 
   const count = images.length;
   const [idx, setIdx] = useState(0);
@@ -111,10 +114,6 @@ export default function ServiceDetailTemplate({
           <Link href="/en/services" className="text-[13px] text-muted hover:text-text transition">
             ← Back
           </Link>
-
-          <Link href="/en/contact" className="button-primary button-primary--auto">
-            Request Quote
-          </Link>
         </motion.div>
 
         <motion.section variants={up} className="mt-8">
@@ -124,13 +123,15 @@ export default function ServiceDetailTemplate({
               <div className="rounded-lg border border-border bg-surface p-5">
                 <div className="flex items-start gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-md border border-border bg-bg">
-                    <Image src={icon} alt="" width={30} height={30} className="h-8 w-8" />
+                    {Icon ? (
+                      <Icon className="h-8 w-8" aria-hidden="true" focusable="false" />
+                    ) : (
+                      <span className="h-8 w-8 rounded bg-white/5" aria-hidden="true" />
+                    )}
                   </div>
 
                   <div className="min-w-0">
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted">
-                      Service
-                    </p>
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted">Service</p>
                     <h1 className="mt-2 text-[15px] sm:text-[16px] font-extrabold leading-6 text-text">
                       {title}
                     </h1>
@@ -156,7 +157,7 @@ export default function ServiceDetailTemplate({
                   </div>
 
                   <div className="p-5">
-                    <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-border bg-bg">
+                    <div className="relative aspect-video overflow-hidden rounded-lg border border-border bg-bg">
                       {/* arrows ON the image */}
                       {count > 1 && (
                         <>

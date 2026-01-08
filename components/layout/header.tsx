@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 
-import { ButtonPrimary } from "../ui/button-primary";
 import TscLogo from "../brand/tsc-logo";
 import ThemeToggle from "@/components/ui/theme-toggle";
 
@@ -43,7 +42,6 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
       <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
 
       <span className="relative block h-4 w-5" aria-hidden="true">
-        {/* top */}
         <span
           className={cx(
             "absolute left-0 top-0 h-0.5 w-full rounded-full bg-current",
@@ -51,7 +49,6 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
             open && "translate-y-1.75 rotate-45"
           )}
         />
-        {/* middle */}
         <span
           className={cx(
             "absolute left-0 top-1.75 h-0.5 w-full rounded-full bg-current",
@@ -59,7 +56,6 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
             open && "opacity-0"
           )}
         />
-        {/* bottom */}
         <span
           className={cx(
             "absolute left-0 top-3.5 h-0.5 w-full rounded-full bg-current",
@@ -76,12 +72,22 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  // ✅ scroll state driven by Motion (avoids scroll handler spam / layout thrash)
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    // only update when value actually changes (prevents rerender spam)
+    const next = y > 10;
+    setScrolled((prev) => (prev === next ? prev : next));
+  });
+
   const closeMenu = useCallback(() => setOpen(false), []);
   const toggleMenu = useCallback(() => setOpen((v) => !v), []);
 
   const prevPathRef = useRef<string | null>(null);
 
-    useEffect(() => {
+  useEffect(() => {
     const prev = prevPathRef.current;
     prevPathRef.current = pathname;
 
@@ -91,7 +97,7 @@ export default function Header() {
 
     const id = window.setTimeout(() => setOpen(false), 0);
     return () => window.clearTimeout(id);
-    }, [pathname, open]);
+  }, [pathname, open]);
 
   // ✅ Body scroll lock
   useEffect(() => {
@@ -105,9 +111,19 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="relative border-b border-white/10 bg-header">
+      <div
+        className={cx(
+          "relative border-b border-white/10",
+          // ✅ keep header size stable (no padding/height animation = no layout thrash)
+          // ✅ blur is expensive; keep it constant, don’t animate it
+          "bg-header/75 backdrop-blur-md",
+          // ✅ shadow only toggles as a class (no animated box-shadow)
+          scrolled && "shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
+        )}
+      >
+        {/* subtle blueprint grid */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.16]"
+          className="pointer-events-none absolute inset-0 opacity-[0.10]"
           aria-hidden="true"
           style={{
             backgroundImage:
@@ -115,18 +131,12 @@ export default function Header() {
             backgroundSize: "16px 16px",
           }}
         />
-        {/* ruler ticks */}
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex justify-between px-4 md:px-6 opacity-[0.35]" aria-hidden="true">
-          {Array.from({ length: 14 }).map((_, i) => (
-            <span key={i} className={cx("block w-px bg-white/30", i % 5 === 0 ? "h-3" : "h-2")} />
-          ))}
-        </div>
 
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
+        <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
           {/* Brand */}
           <Link href="/en" className="flex items-center gap-3" aria-label="Go to home">
             <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-surface">
-              <TscLogo className="h-7 w-auto text-[#2F6BFF]" />
+              <TscLogo className="h-7 w-auto text-accent" />
             </span>
 
             <div className="leading-tight">
@@ -160,20 +170,8 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <div className="hidden md:block">
-              <ButtonPrimary className="button-primary--full">
-                <Link
-                    href="/en/contact"
-                    onClick={() => setOpen(false)}
-                    className="block w-full text-center"
-                >
-                    Request Quote
-                </Link>
-               </ButtonPrimary>
-            </div>
-
+            {/* ✅ Removed Request Quote button (as requested) */}
             <ThemeToggle />
-
             <BurgerButton open={open} onClick={toggleMenu} />
           </div>
         </div>
@@ -211,9 +209,7 @@ export default function Header() {
                         onClick={closeMenu}
                         className={cx(
                           "flex items-center justify-between rounded-xl px-3 py-3 text-sm transition",
-                          active
-                            ? "bg-white/6 text-text"
-                            : "text-muted hover:bg-white/4 hover:text-text"
+                          active ? "bg-white/6 text-text" : "text-muted hover:bg-white/4 hover:text-text"
                         )}
                         aria-current={active ? "page" : undefined}
                       >
@@ -222,14 +218,6 @@ export default function Header() {
                       </Link>
                     );
                   })}
-
-                  <div className="mt-2 border-t border-white/10 pt-2">
-                    <ButtonPrimary>
-                      <Link href="/en/contact" onClick={() => setOpen(false)} className="block">
-                        Request Quote
-                      </Link>
-                    </ButtonPrimary>
-                  </div>
                 </nav>
               </div>
             </motion.div>

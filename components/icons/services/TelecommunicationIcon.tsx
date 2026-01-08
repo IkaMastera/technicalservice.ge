@@ -1,21 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 25.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:url(#SVGID_1_);}
-</style>
-<g>
-	<radialGradient id="SVGID_1_" cx="2.4194" cy="4.7419" r="508.1212" gradientUnits="userSpaceOnUse">
-		<stop  offset="0" style="stop-color:#0A38FD"/>
-		<stop  offset="0.2308" style="stop-color:#0A38FA"/>
-		<stop  offset="0.4148" style="stop-color:#0A37F0"/>
-		<stop  offset="0.5826" style="stop-color:#0B36DF"/>
-		<stop  offset="0.7409" style="stop-color:#0B35C7"/>
-		<stop  offset="0.891" style="stop-color:#0C33A9"/>
-		<stop  offset="1" style="stop-color:#0C318E"/>
-	</radialGradient>
-	<path class="st0" d="M0,372C0,263.3,0,154.7,0,46c1.3-3.8,2.1-7.7,3.9-11.2c7.6-15.3,20.4-22,37.3-21.9c66.7,0.1,133.3,0,200,0
+import * as React from "react";
+
+type Props = React.SVGProps<SVGSVGElement> & { title?: string };
+
+export default function TelecommunicationIcon({
+  title = "Telecommunication system",
+  ...props
+}: Props) {
+  return (
+    <svg viewBox="0 0 512 512" role="img" aria-label={title} {...props}>
+      <title>{title}</title>
+      <g fill="currentColor">
+        <path d="M0,372C0,263.3,0,154.7,0,46c1.3-3.8,2.1-7.7,3.9-11.2c7.6-15.3,20.4-22,37.3-21.9c66.7,0.1,133.3,0,200,0
 		c76.7,0,153.3,0,230,0c24.3,0,40.8,15.9,40.8,39.6c0.1,104.3,0.1,208.7-0.1,313c0,6.1-1.4,12.8-4.1,18.3
 		c-7.3,15.2-20.3,21.6-37,21.5c-47.7-0.1-95.3,0-143,0c-1.9,0-3.9,0-6.3,0c0,2.8-0.1,4.9,0,7c1.9,24.2,20.5,34.9,38.4,44.7
 		c11.1,6.1,18.2,16.1,14.2,28c-3.1,9.2-10.8,14.2-22.2,14.2c-60.7,0-121.3,0-182,0c-4.5,0-9,0.1-13.5-0.1c-9.9-0.5-18.2-8-19.5-17.6
@@ -28,5 +23,7 @@
 		c-15.4-13.7-22.1-30.5-22.1-49.8c-32.4,0-64.2,0-96.2,0C208.2,426.2,201,442.5,185.5,455.7z M255.9,473.7c-32,0-63.9,0-95.9,0
 		c-2.9,0-6.1-0.1-6.2,4c-0.1,4.4,3.1,4.4,6.3,4.4c63.9,0,127.9,0,191.8,0c3.2,0,6.4-0.2,6.2-4.5c-0.2-4-3.4-3.9-6.3-3.9
 		C319.9,473.7,287.9,473.7,255.9,473.7z"/>
-</g>
-</svg>
+      </g>
+    </svg>
+  );
+}

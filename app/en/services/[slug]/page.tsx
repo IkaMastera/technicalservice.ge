@@ -30,5 +30,5 @@ export default async function ServicePage({ params }: Props) {
 
   const images = getServiceImagePaths(p.slug, "jpg");
 
-  return <ServiceDetailTemplate title={s.title} icon={s.icon} slug={p.slug} images={images} />;
+  return <ServiceDetailTemplate title={s.title} slug={p.slug} images={images} />;
 }

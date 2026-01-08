@@ -1,68 +1,86 @@
+import type { ComponentType, SVGProps } from "react";
+
+// ✅ Import your icon components (create these files in components/icons/services/)
+import BuildingArchitectureIcon from "@/components/icons/services/BuildingArchitectureIcon";
+import FireSystemSignalIcon from "@/components/icons/services/FireSystemSignalIcon";
+import GeneratorIcon from "@/components/icons/services/GeneratorIcon";
+import ElectricalSystemIcon from "@/components/icons/services/ElectricalSystemIcon";
+import AirConditioningIcon from "@/components/icons/services/AirConditioningIcon";
+import PlumbingIcon from "@/components/icons/services/PlumbingIcon";
+import BoilerHeatingIcon from "@/components/icons/services/BoilerHeatingIcon";
+import WaterIcon from "@/components/icons/services/WaterIcon";
+import KitchenwareIcon from "@/components/icons/services/KitchenwareIcon";
+import TelecommunicationIcon from "@/components/icons/services/TelecommunicationIcon";
+import CctvIcon from "@/components/icons/services/CctvIcon";
+import ParkingAutomationIcon from "@/components/icons/services/ParkingAutomationIcon";
+
+export type ServiceIcon = ComponentType<SVGProps<SVGSVGElement> & { title?: string }>;
+
 export type ServiceItem = {
   title: string;
   slug: string;
-  icon: string;
+  Icon: ServiceIcon;
 };
 
 export const SERVICES: ServiceItem[] = [
   {
     title: "Building exterior / interior",
     slug: "building-exterior-interior",
-    icon: "/media/images/services/buildingarchitecture.svg",
+    Icon: BuildingArchitectureIcon,
   },
   {
     title: "Fire alarm and sound system",
     slug: "fire-alarm-sound",
-    icon: "/media/images/services/firesystemsignal.svg",
+    Icon: FireSystemSignalIcon,
   },
   {
     title: "Generator and transformer system",
     slug: "generator-transformer",
-    icon: "/media/images/services/generator.svg",
+    Icon: GeneratorIcon,
   },
   {
     title: "Electrical systems",
     slug: "electrical-systems",
-    icon: "/media/images/services/electricalsystem.svg",
+    Icon: ElectricalSystemIcon,
   },
   {
     title: "Air conditioning",
     slug: "air-conditioning",
-    icon: "/media/images/services/air-conditioning.svg",
+    Icon: AirConditioningIcon,
   },
   {
     title: "Plumbing and mechanical works",
     slug: "plumbing-mechanical",
-    icon: "/media/images/services/plumbing.svg",
+    Icon: PlumbingIcon,
   },
   {
     title: "Boiler – heating system",
     slug: "boiler-heating",
-    icon: "/media/images/services/qvabi.svg",
+    Icon: BoilerHeatingIcon,
   },
   {
     title: "Water treatment",
     slug: "water-treatment",
-    icon: "/media/images/services/water.svg",
+    Icon: WaterIcon,
   },
   {
     title: "Kitchen and laundry appliances",
     slug: "kitchen-laundry",
-    icon: "/media/images/services/kitchenware.svg",
+    Icon: KitchenwareIcon,
   },
   {
     title: "Telecommunication / TV system",
     slug: "telecommunication-tv",
-    icon: "/media/images/services/telecommunication.svg",
+    Icon: TelecommunicationIcon,
   },
   {
     title: "CCTV / monitoring system",
     slug: "cctv-monitoring",
-    icon: "/media/images/services/cctv.svg",
+    Icon: CctvIcon,
   },
   {
     title: "Parking automation system",
     slug: "parking-automation",
-    icon: "/media/images/services/automation-parking.svg",
+    Icon: ParkingAutomationIcon,
   },
 ];
