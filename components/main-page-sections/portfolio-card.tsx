@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, type Variants, useReducedMotion } from "framer-motion";
 import type { PortfolioItem } from "@/data/portfolio";
-import { ChevronRight } from "lucide-react";
 
 const cardIn: Variants = {
   hidden: { opacity: 0, y: 14 },
@@ -18,115 +17,127 @@ export function PortfolioCard({ item }: { item: PortfolioItem }) {
     <motion.article
       variants={cardIn}
       className="
-        group relative overflow-hidden rounded-xl border border-border bg-surface
+        group relative overflow-hidden rounded-xl
+        border border-border bg-surface
         shadow-[0_12px_35px_rgba(0,0,0,0.22)]
       "
     >
-      {/* Blueprint grid texture */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.25]">
-        <div
-          className="
-            absolute inset-0
-            [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)]
-            [background-size:26px_26px]
-          "
-        />
-      </div>
+      {/* Thin inspection stripe (kept, but quieter) */}
+      <div aria-hidden="true" className="absolute left-0 top-0 h-full w-[2px] bg-accent/80" />
 
-      {/* Spec stripe */}
-      <div aria-hidden="true" className="absolute left-0 top-0 h-full w-[3px] bg-accent/90" />
-
-      <Link href={`/en/portfolio/${item.slug}`} className="block">
+      <Link
+        href={`/en/portfolio/${item.slug}`}
+        className="
+          block focus:outline-none
+          focus-visible:ring-2 focus-visible:ring-accent/70
+          focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]
+        "
+      >
         {/* Media */}
-        <div className="relative aspect-[16/9] overflow-hidden bg-surface2">
+        <div className="relative aspect-[16/10] overflow-hidden bg-surface2">
+          {/* Photo */}
           <Image
             src={item.cover.src}
             alt={item.cover.alt}
             fill
-            className={`
-              object-cover
-              ${reduce ? "" : "transition-transform duration-500 ease-out group-hover:scale-[1.03]"}
-            `}
+            priority={!!item.featured}
+            className={[
+              "object-cover",
+              // Start slightly muted, go “truer” on hover (visual-first)
+              "saturate-[0.92] contrast-[1.02]",
+              reduce ? "" : "transition-transform duration-500 ease-out group-hover:scale-[1.015]",
+            ].join(" ")}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          {/* Darken overlay on hover */}
+
+          {/* Default subtle darken to fit dark UI; ease off on hover */}
           <div
             aria-hidden="true"
-            className={`
-              absolute inset-0
-              ${reduce ? "opacity-25" : "opacity-15 group-hover:opacity-35 transition-opacity duration-300"}
-              bg-black
-            `}
+            className={[
+              "absolute inset-0",
+              "bg-black",
+              reduce
+                ? "opacity-25"
+                : "opacity-30 group-hover:opacity-18 transition-opacity duration-300",
+            ].join(" ")}
           />
-        </div>
 
-        {/* Body */}
-        <div className="relative p-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <p className="text-xs text-muted">
-                {item.category} • {item.location}
-                {item.year ? ` • ${item.year}` : ""}
-              </p>
-
-              <h3 className="mt-1 truncate text-lg font-semibold tracking-tight text-text">
-                {item.title}
-              </h3>
-
-              {/* Underline indicator */}
-              <div className="mt-3 h-[1px] w-full bg-border" />
-              <div
-                aria-hidden="true"
-                className={`
-                  mt-[-1px] h-[2px] w-10 bg-accent
-                  ${reduce ? "" : "transition-all duration-300 group-hover:w-20"}
-                `}
-              />
-            </div>
-
-            <span
+          {/* Blueprint grid only on hover (keeps engineering identity without clutter) */}
+          <div
+            aria-hidden="true"
+            className={[
+              "pointer-events-none absolute inset-0",
+              reduce ? "opacity-0" : "opacity-0 group-hover:opacity-[0.18] transition-opacity duration-300",
+            ].join(" ")}
+          >
+            <div
               className="
-                inline-flex items-center gap-1 rounded-lg border border-border bg-surface2 px-2 py-1
-                text-xs text-muted
+                absolute inset-0
+                [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)]
+                [background-size:28px_28px]
               "
-            >
-              View <ChevronRight className="h-4 w-4 text-accent" />
-            </span>
+            />
           </div>
 
-          {/* Hover dossier */}
-          <div
-            className={`
-              mt-4 grid gap-3
-              ${reduce ? "" : "transition-all duration-300"}
-            `}
-          >
-            <div className="flex flex-wrap gap-2">
-              {item.systems.slice(0, 4).map((s) => (
-                <span
-                  key={s}
-                  className="
-                    rounded-full border border-border bg-surface2 px-2.5 py-1
-                    text-xs text-muted
-                  "
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-
+          {/* Bottom-left always-visible minimal label (title only) */}
+          <div className="absolute bottom-3 left-3 right-3">
             <div
-              className={`
-                overflow-hidden rounded-xl border border-border bg-surface2 p-3
-                ${reduce ? "" : "max-h-0 group-hover:max-h-40 transition-[max-height] duration-500 ease-out"}
-              `}
+              className="
+                inline-flex max-w-full items-center
+                rounded-lg border border-border bg-surface/80 px-3 py-2
+                backdrop-blur-[6px]
+              "
             >
-              <p className="text-xs font-medium text-text">Scope highlights</p>
-              <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-muted">
-                {item.highlights.slice(0, 3).map((h) => (
-                  <li key={h}>{h}</li>
-                ))}
-              </ul>
+              <p className="truncate text-sm font-semibold text-text">
+                {item.title}
+              </p>
+            </div>
+          </div>
+
+          {/* Hover dossier overlay (compact “spec plate”) */}
+          <div
+            className={[
+              "absolute inset-0",
+              "flex items-end",
+              reduce ? "opacity-100" : "opacity-0 group-hover:opacity-100 transition-opacity duration-250",
+            ].join(" ")}
+          >
+            <div
+              className="
+                w-full p-4
+                bg-gradient-to-t from-black/65 via-black/35 to-transparent
+              "
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-md border border-border bg-surface2/80 px-2 py-1 text-[11px] text-muted">
+                  {item.category}
+                </span>
+                {item.year ? (
+                  <span className="rounded-md border border-border bg-surface2/80 px-2 py-1 text-[11px] text-muted">
+                    {item.year}
+                  </span>
+                ) : null}
+              </div>
+
+              <p className="mt-2 text-sm text-text/95">
+                <span className="text-muted">Location:</span>{" "}
+                {item.location}
+              </p>
+
+              {/* Systems: single line, max 3. No pills everywhere. */}
+              <p className="mt-1 text-sm text-muted">
+                <span className="text-text/90">Systems:</span>{" "}
+                {item.systems.slice(0, 3).join(" • ")}
+                {item.systems.length > 3 ? " • …" : ""}
+              </p>
+
+              {/* Micro “detail hint” (engineering-style) */}
+              <div className="mt-3 flex items-center gap-2">
+                <div className="h-[1px] flex-1 bg-border" />
+                <span className="text-[11px] text-muted">
+                  Open project dossier
+                </span>
+              </div>
             </div>
           </div>
         </div>
