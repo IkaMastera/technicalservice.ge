@@ -4,13 +4,17 @@ import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { SERVICES } from "@/data/services";
 import { ButtonPrimary } from "../ui/button-primary";
+import { copy } from "@/content/copy";
+
+type Lang = "en" | "ka";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-export default function ServicesGridSection() {
+export default function ServicesGridSection({ lang = "en" }: { lang?: Lang }) {
   const reduce = useReducedMotion();
+  const t = copy[lang].home.services;
 
   const wrap: Variants = {
     hidden: { opacity: 0 },
@@ -33,7 +37,7 @@ export default function ServicesGridSection() {
   };
 
   return (
-    <section id="services" className="relative bg-bg border-t border-border">
+    <section id="services" className="relative bg-bg2 border-t border-border">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
@@ -56,17 +60,12 @@ export default function ServicesGridSection() {
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         {/* header */}
         <div className="max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.22em] text-muted">
-            Systems & Integration
-          </p>
+          <p className="text-xs uppercase tracking-[0.22em] text-muted">{t.kicker}</p>
           <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-text">
-            Services
+            {t.heading}
           </h2>
           <div className="mt-4 h-px w-40 bg-accent/70" />
-          <p className="mt-5 text-[15px] leading-7 text-muted">
-            Engineering-grade installations, integration, and maintenance — delivered
-            with documentation discipline and inspection-ready handover.
-          </p>
+          <p className="mt-5 text-[15px] leading-7 text-muted">{t.desc}</p>
         </div>
 
         {/* grid */}
@@ -83,7 +82,7 @@ export default function ServicesGridSection() {
             return (
               <motion.div key={s.slug} variants={item}>
                 <Link
-                  href={`/en/services/${s.slug}`}
+                  href={`/${lang}/services/${s.slug}`}
                   className={cx(
                     "group block h-full rounded-xl border border-border",
                     "bg-surface",
@@ -106,7 +105,7 @@ export default function ServicesGridSection() {
                           h-10 w-10
                           text-muted
                           transition-colors duration-200
-                          group-hover:text-[color:var(--color-accent)]
+                          group-hover:text-accent
                         "
                         aria-hidden
                       />
@@ -121,21 +120,13 @@ export default function ServicesGridSection() {
                     <div className="mt-4 h-7 w-px bg-accent2/35 group-hover:bg-accent/70 transition-colors duration-200" />
 
                     {/* micro hint */}
-                    <p className="mt-3 text-[12px] leading-5 text-muted opacity-90">
-                      View details
-                    </p>
+                    <p className="mt-3 text-[12px] leading-5 text-muted opacity-90">{t.itemHint}</p>
                   </div>
                 </Link>
               </motion.div>
             );
           })}
         </motion.div>
-        <ButtonPrimary
-                className="mt-8"
-                onClick={() => (window.location.href = "/en/about")}
-                >
-                View All
-        </ButtonPrimary>
       </div>
     </section>
   );

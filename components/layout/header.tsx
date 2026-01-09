@@ -3,27 +3,44 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  LayoutGroup,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
 
 import TscLogo from "../brand/tsc-logo";
 import ThemeToggle from "@/components/ui/theme-toggle";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 
 const NAV = [
-  { label: "Home", href: "/en" },
-  { label: "Services", href: "/en/services" },
-  { label: "Portfolio", href: "/en/portfolio" },
-  { label: "About", href: "/en/about" },
-  { label: "Contact", href: "/en/contact" },
+  { label: "Home", href: "" },
+  { label: "Services", href: "/services" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Divisions", href: "/divisions" },
 ] as const;
 
 function cx(...parts: Array<string | false | undefined | null>) {
   return parts.filter(Boolean).join(" ");
 }
 
+function getLocalePrefix(pathname: string | null) {
+  if (!pathname) return "/en";
+  return pathname.startsWith("/ka") ? "/ka" : "/en";
+}
+
+// ✅ ONLY change: special-case Home so it doesn't match every /en/* or /ka/*
 function isActive(pathname: string | null, href: string) {
   if (!pathname) return false;
-  if (href === "/en") return pathname === "/en";
-  return pathname.startsWith(href);
+
+  // Home should only be active on exact locale root
+  if (href === "/en" || href === "/ka") return pathname === href;
+
+  return pathname === href || pathname.startsWith(href + "/");
 }
 
 function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void }) {
@@ -70,14 +87,14 @@ function BurgerButton({ open, onClick }: { open: boolean; onClick: () => void })
 
 export default function Header() {
   const pathname = usePathname();
+  const locale = getLocalePrefix(pathname);
+
   const [open, setOpen] = useState(false);
 
-  // ✅ scroll state driven by Motion (avoids scroll handler spam / layout thrash)
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (y) => {
-    // only update when value actually changes (prevents rerender spam)
     const next = y > 10;
     setScrolled((prev) => (prev === next ? prev : next));
   });
@@ -114,10 +131,7 @@ export default function Header() {
       <div
         className={cx(
           "relative border-b border-white/10",
-          // ✅ keep header size stable (no padding/height animation = no layout thrash)
-          // ✅ blur is expensive; keep it constant, don’t animate it
           "bg-header/75 backdrop-blur-md",
-          // ✅ shadow only toggles as a class (no animated box-shadow)
           scrolled && "shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
         )}
       >
@@ -134,7 +148,7 @@ export default function Header() {
 
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
           {/* Brand */}
-          <Link href="/en" className="flex items-center gap-3" aria-label="Go to home">
+          <Link href={locale} className="flex items-center gap-3" aria-label="Go to home">
             <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-surface">
               <TscLogo className="h-7 w-auto text-accent" />
             </span>
@@ -145,32 +159,42 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-            {NAV.map((item) => {
-              const active = isActive(pathname, item.href);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cx(
-                    "relative rounded-lg px-3 py-2 text-sm transition",
-                    "text-muted hover:text-text hover:bg-white/4",
-                    active && "text-text"
-                  )}
-                  aria-current={active ? "page" : undefined}
-                >
-                  {item.label}
-                  {active && (
-                    <span className="absolute left-3 right-3 top-[calc(100%+6px)] h-0.5 rounded-full bg-accent" />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+          <LayoutGroup id="header-nav">
+            <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
+              {NAV.map((item) => {
+                const href = `${locale}${item.href}`;
+                const active = isActive(pathname, href);
+
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={cx(
+                      "relative rounded-lg px-3 py-2 text-sm transition",
+                      "text-muted hover:text-text hover:bg-white/4",
+                      active && "text-text"
+                    )}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {item.label}
+
+                    {/* Shared underline that slides between items */}
+                    {active ? (
+                      <motion.span
+                        layoutId="nav-underline"
+                        className="absolute left-3 right-3 top-[calc(100%+6px)] h-0.5 rounded-full bg-accent"
+                        transition={{ type: "spring", stiffness: 700, damping: 45 }}
+                      />
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </nav>
+          </LayoutGroup>
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            {/* ✅ Removed Request Quote button (as requested) */}
+            <LanguageSwitcher />
             <ThemeToggle />
             <BurgerButton open={open} onClick={toggleMenu} />
           </div>
@@ -201,11 +225,13 @@ export default function Header() {
               <div className="mx-4 rounded-2xl border border-white/10 bg-surface shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
                 <nav className="flex flex-col p-2" aria-label="Mobile navigation">
                   {NAV.map((item) => {
-                    const active = isActive(pathname, item.href);
+                    const href = `${locale}${item.href}`;
+                    const active = isActive(pathname, href);
+
                     return (
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        key={href}
+                        href={href}
                         onClick={closeMenu}
                         className={cx(
                           "flex items-center justify-between rounded-xl px-3 py-3 text-sm transition",

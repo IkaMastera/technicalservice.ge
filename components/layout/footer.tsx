@@ -88,7 +88,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-bg">
+    <footer className="border-t border-border bg-bg2">
       {/* Calibration divider */}
       <div
         className={cx(

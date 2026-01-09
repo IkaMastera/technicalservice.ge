@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { CONTACT, CONTACT_LINKS } from "@/data/contact";
 import { IconGlobe, IconMail, IconPhone, IconPin } from "@/components/icons/contact-icons";
+import { copy } from "@/content/copy";
+
+type Lang = "en" | "ka";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -19,7 +22,6 @@ function Item({
 }) {
   return (
     <div className="flex items-start gap-3">
-      {/* ✅ uses your palette (no random blue) */}
       <div
         className={cx(
           "mt-0.5 grid h-10 w-10 place-items-center rounded-lg",
@@ -39,12 +41,12 @@ function Item({
   );
 }
 
-export default function ContactUsSection() {
+export default function ContactUsSection({ lang = "en" }: { lang?: Lang }) {
+  const t = copy[lang].home.contact;
   const mapsUrl = CONTACT_LINKS.mapsCoords(CONTACT.address.lat, CONTACT.address.lng);
 
   return (
     <section id="contact" className="relative border-t border-border bg-bg">
-      {/* subtle blueprint wash consistent with your sections */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
@@ -67,29 +69,25 @@ export default function ContactUsSection() {
         <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
           {/* Left */}
           <div className="lg:col-span-5">
-            <p className="text-xs uppercase tracking-[0.22em] text-muted">Contact</p>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-text">
-              Get in touch
-            </h2>
+            <p className="text-xs uppercase tracking-[0.22em] text-muted">{t.kicker}</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-text">{t.heading}</h2>
             <div className="mt-4 h-px w-40 bg-accent/70" />
-            <p className="mt-5 text-[15px] leading-7 text-muted">
-              Site visits, proposals, and maintenance support — delivered with inspection-ready discipline.
-            </p>
+            <p className="mt-5 text-[15px] leading-7 text-muted">{t.desc}</p>
           </div>
 
           {/* Right card */}
           <div className="lg:col-span-7">
             <div className="rounded-2xl border border-border bg-surface p-6">
               <div className="flex items-center justify-between gap-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-muted">Contact Information</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-muted">{t.cardTitle}</p>
                 <span className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface2 px-3 py-1 text-[12px] text-text">
                   <span className="h-2 w-2 rounded-full bg-accent" />
-                  Direct lines
+                  {t.cardChip}
                 </span>
               </div>
 
               <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                <Item icon={<IconPin className="h-5 w-5" />} label="Address">
+                <Item icon={<IconPin className="h-5 w-5" />} label={t.labels.address}>
                   <a
                     href={mapsUrl}
                     target="_blank"
@@ -100,7 +98,7 @@ export default function ContactUsSection() {
                   </a>
                 </Item>
 
-                <Item icon={<IconGlobe className="h-5 w-5" />} label="Website">
+                <Item icon={<IconGlobe className="h-5 w-5" />} label={t.labels.website}>
                   <a
                     href={`https://${CONTACT.website}`}
                     target="_blank"
@@ -111,7 +109,7 @@ export default function ContactUsSection() {
                   </a>
                 </Item>
 
-                <Item icon={<IconMail className="h-5 w-5" />} label="Email">
+                <Item icon={<IconMail className="h-5 w-5" />} label={t.labels.email}>
                   <div className="space-y-1">
                     <a
                       href={CONTACT_LINKS.mailto(CONTACT.emailPrimary)}
@@ -128,7 +126,7 @@ export default function ContactUsSection() {
                   </div>
                 </Item>
 
-                <Item icon={<IconPhone className="h-5 w-5" />} label="Phone">
+                <Item icon={<IconPhone className="h-5 w-5" />} label={t.labels.phone}>
                   <div className="space-y-1">
                     {CONTACT.phones.map((p) => (
                       <a
@@ -149,13 +147,13 @@ export default function ContactUsSection() {
 
               <div className="mt-6 flex flex-wrap gap-2">
                 <Link
-                  href="/en/contact"
+                  href={`/${lang}/contact`}
                   className={cx(
                     "rounded-xl border border-border bg-surface2 px-4 py-2 text-sm text-text",
                     "hover:border-white/20 transition"
                   )}
                 >
-                  Open contact page
+                  {t.ctaOpen}
                 </Link>
 
                 <a
@@ -165,7 +163,7 @@ export default function ContactUsSection() {
                     "hover:border-white/20 transition"
                   )}
                 >
-                  Call now
+                  {t.ctaCall}
                 </a>
               </div>
             </div>

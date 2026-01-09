@@ -4,13 +4,18 @@ import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import { portfolioItems } from "@/data/portfolio";
 import { PortfolioCard } from "./portfolio-card";
+import { ButtonPrimary } from "../ui/button-primary";
+import { copy } from "@/content/copy";
+
+type Lang = "en" | "ka";
 
 const container: Variants = {
   hidden: { opacity: 0, y: 10 },
   show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut", staggerChildren: 0.08 } },
 };
 
-export default function PortfolioPreview() {
+export default function PortfolioPreview({ lang = "en" }: { lang?: Lang }) {
+  const t = copy[lang].home.portfolio;
   const featured = portfolioItems.filter((x) => x.featured).slice(0, 4);
 
   return (
@@ -19,47 +24,50 @@ export default function PortfolioPreview() {
         <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.25 }}>
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs text-muted">Portfolio</p>
+              <p className="text-xs text-muted">{t.kicker}</p>
+
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-text sm:text-4xl">
-                Selected projects, delivered{" "}
-                <span className="text-accent">inspection-ready</span>.
+                {t.title} <span className="text-accent">{t.accent}</span>.
               </h2>
-              <p className="mt-3 max-w-2xl text-base text-muted">
-                Real buildings. Real systems. Clear scope, testing, and handover — executed with engineering discipline.
-              </p>
+
+              <p className="mt-3 max-w-2xl text-base text-muted">{t.desc}</p>
             </div>
 
             <Link
-              href="/en/portfolio"
+              href={`/${lang}/portfolio`}
               className="
                 hidden sm:inline-flex items-center justify-center rounded-xl border border-border bg-surface2
                 px-4 py-2 text-sm text-text
                 hover:bg-surface transition
               "
             >
-              View all
+              {t.viewAll}
             </Link>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {featured.map((item) => (
-              <PortfolioCard key={item.slug} item={item} />
+              <PortfolioCard key={item.slug} item={item} lang={lang} />
             ))}
           </div>
 
           <div className="mt-8 sm:hidden">
             <Link
-              href="/en/portfolio"
+              href={`/${lang}/portfolio`}
               className="
                 inline-flex w-full items-center justify-center rounded-xl border border-border bg-surface2
                 px-4 py-2 text-sm text-text
                 hover:bg-surface transition
               "
             >
-              View all projects
+              {t.viewAllMobile}
             </Link>
           </div>
         </motion.div>
+
+        <ButtonPrimary className="mt-8" onClick={() => (window.location.href = `/${lang}/portfolio`)}>
+          {t.cta}
+        </ButtonPrimary>
       </div>
     </section>
   );

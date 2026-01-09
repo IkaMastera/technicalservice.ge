@@ -2,40 +2,30 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ButtonPrimary } from "../ui/button-primary";
+import { copy } from "@/content/copy";
+
+type Lang = "en" | "ka";
 
 type Stat = {
-  label: string;
-  value: string;
-  hint: string;
+  readonly label: string;
+  readonly value: string;
+  readonly hint: string;
 };
 
-const STATS: Stat[] = [
-  { label: "Established", value: "2020", hint: "Operational engineering services" },
-  { label: "Delivery Focus", value: "100+", hint: "Projects executed & maintained" },
-  { label: "Experience", value: "17 yrs", hint: "Combined engineering background" },
-];
-
-const PRINCIPLES = [
-  {
-    title: "Safety-first execution",
-    desc: "Designs and installs aligned to standards, documentation and accountability.",
-  },
-  {
-    title: "Integration discipline",
-    desc: "Systems work together: fire, electrical, HVAC, CCTV, automation — no chaos wiring.",
-  },
-  {
-    title: "Inspection-ready handover",
-    desc: "Clear scope, clean deliverables, and maintenance mindset from day one.",
-  },
-];
+type Principle = {
+  readonly title: string;
+  readonly desc: string;
+};
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-export default function AboutUsSection() {
+export default function AboutUsSection({ lang = "en" }: { lang?: Lang }) {
   const reduce = useReducedMotion();
+
+  const t = copy[lang].home.about;
+
   const wrap: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -71,11 +61,15 @@ export default function AboutUsSection() {
     },
   };
 
+  // ✅ minimal fix: keep readonly arrays as-is (no casting to mutable arrays)
+  const stats: ReadonlyArray<Stat> = t.stats;
+  const principles: ReadonlyArray<Principle> = t.principles;
+
   return (
     <section
       id="about"
       className="relative overflow-hidden border-t border-white/10 bg-bg"
-      aria-label="About Technical Service Company"
+      aria-label={t.ariaLabel}
     >
       {/* subtle blueprint grid texture */}
       <div
@@ -112,50 +106,39 @@ export default function AboutUsSection() {
               className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/3 px-3 py-1 text-xs text-muted"
             >
               <span className="h-2 w-2 rounded-full bg-accent" />
-              Engineering services • Outsourcing • Integration
+              {t.badge}
             </motion.div>
 
             <motion.h2
               variants={item}
               className="mt-4 font-semibold tracking-tight text-text text-3xl sm:text-4xl"
             >
-              About TSC
+              {t.heading}
             </motion.h2>
 
             <motion.div variants={line} className="mt-4 h-px w-40 origin-left bg-accent/70" />
 
             <motion.p variants={item} className="mt-5 text-base leading-7 text-muted">
-              <span className="text-text">Nothing is impossible. Everything is permitted.</span>
+              <span className="text-text">{t.motto}</span>
             </motion.p>
 
             <motion.div variants={item} className="mt-5 space-y-4 text-[15px] leading-7 text-muted">
-              <p>
-                <span className="text-text">TSC – Technical Service Company</span> offers innovative engineering
-                services to create better living spaces since <span className="text-text">2020</span>.
-              </p>
-              <p>
-                We are a multifunctional outsourcing company with qualified and authorized services. TSC integrates
-                sustainable technological / engineering solutions into living spaces — and we aim to suggest reliable
-                engineering decisions you can depend on.
-              </p>
-              <p>
-                Our strategic approach is to develop a safe, creative, future-oriented engineering environment — backed
-                by <span className="text-text">17 years</span> of experience.
-              </p>
+              {t.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
             </motion.div>
 
             <motion.div variants={item} className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonPrimary
-                onClick={() => (window.location.href = "/en/about")}
-                >
-                Learn more
+              <ButtonPrimary onClick={() => (window.location.href = `/${lang}/about`)}>
+                {t.ctaPrimary}
               </ButtonPrimary>
+
               <a
-                href="/en/portfolio"
+                href={`/${lang}/portfolio`}
                 className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/2 px-5 py-3 text-sm font-semibold text-text
                            transition-colors duration-200 hover:bg-white/5"
               >
-                View portfolio
+                {t.ctaSecondary}
               </a>
             </motion.div>
           </div>
@@ -169,17 +152,17 @@ export default function AboutUsSection() {
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-muted">Company profile</p>
-                    <p className="mt-1 text-lg font-bold text-text">Technical Service Company</p>
+                    <p className="text-xs uppercase tracking-wider text-muted">{t.profileKicker}</p>
+                    <p className="mt-1 text-lg font-bold text-text">{t.profileTitle}</p>
                   </div>
 
                   <div className="rounded-md border border-white/10 bg-white/3 px-2 py-1 text-[11px] text-muted">
-                    Verified process
+                    {t.profileChip}
                   </div>
                 </div>
 
                 <div className="mt-5 grid grid-cols-3 gap-3">
-                  {STATS.map((s) => (
+                  {stats.map((s) => (
                     <motion.div
                       key={s.label}
                       whileHover={reduce ? undefined : { y: -2 }}
@@ -195,18 +178,15 @@ export default function AboutUsSection() {
               </motion.div>
 
               <motion.div variants={item} className="rounded-xl border border-white/10 bg-surface p-5">
-                <p className="text-xs uppercase tracking-wider text-muted">Core principles</p>
+                <p className="text-xs uppercase tracking-wider text-muted">{t.principlesKicker}</p>
 
                 <div className="mt-4 space-y-3">
-                  {PRINCIPLES.map((p) => (
+                  {principles.map((p) => (
                     <motion.div
                       key={p.title}
                       whileHover={reduce ? undefined : { y: -2 }}
                       transition={{ duration: 0.18 }}
-                      className={cx(
-                        "rounded-lg border border-white/10 bg-surface2 p-4",
-                        "hover:border-white/20"
-                      )}
+                      className={cx("rounded-lg border border-white/10 bg-surface2 p-4", "hover:border-white/20")}
                     >
                       <div className="flex items-start gap-3">
                         <span className="mt-1 h-2.5 w-2.5 flex-none rounded-full bg-accent" />
@@ -222,8 +202,8 @@ export default function AboutUsSection() {
                 <motion.div variants={line} className="mt-5 h-px w-full origin-left bg-white/10" />
 
                 <div className="mt-4 flex items-center justify-between text-[12px] text-muted">
-                  <span>Documentation discipline</span>
-                  <span className="text-[#2F6BFF]">Integration-ready</span>
+                  <span>{t.footerLeft}</span>
+                  <span className="text-[#2F6BFF]">{t.footerRight}</span>
                 </div>
               </motion.div>
             </div>

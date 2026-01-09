@@ -4,12 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import MapEmbed from "@/components/contact/map-embed";
 import { CONTACT, CONTACT_LINKS } from "@/data/contact";
-import {
-  IconGlobe,
-  IconMail,
-  IconPhone,
-  IconPin,
-} from "@/components/icons/contact-icons";
+import { IconGlobe, IconMail, IconPhone, IconPin } from "@/components/icons/contact-icons";
+import { copy } from "@/content/copy";
+
+type Lang = "en" | "ka";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -17,9 +15,7 @@ function cx(...parts: Array<string | false | null | undefined>) {
 
 const stagger: Variants = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.06, delayChildren: 0.03 },
-  },
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.03 } },
 };
 
 const fadeUp: Variants = {
@@ -59,7 +55,6 @@ function Field(props: {
             "group-focus-within:border-white/20 group-focus-within:bg-surface2/30"
           )}
         >
-          {/* Subtle corner brackets */}
           <span
             aria-hidden="true"
             className={cx(
@@ -89,7 +84,6 @@ function Field(props: {
             )}
           />
 
-          {/* Focus dot */}
           <span
             aria-hidden="true"
             className={cx(
@@ -112,9 +106,7 @@ function Field(props: {
               required={required}
               name={name}
               type={type}
-              inputMode={
-                type === "tel" ? "tel" : type === "email" ? "email" : undefined
-              }
+              inputMode={type === "tel" ? "tel" : type === "email" ? "email" : undefined}
               placeholder={placeholder}
               className={commonInput}
             />
@@ -142,10 +134,7 @@ function ContactCard(props: {
       variants={fadeUp}
       whileHover={
         canHover
-          ? {
-              y: -2,
-              transition: { duration: 0.16, ease: "easeOut" },
-            }
+          ? { y: -2, transition: { duration: 0.16, ease: "easeOut" } }
           : undefined
       }
       whileTap={{ scale: 0.99 }}
@@ -154,7 +143,6 @@ function ContactCard(props: {
         "transition-colors duration-200 hover:border-white/20"
       )}
     >
-      {/* Amber scan bar INSIDE card */}
       <span
         aria-hidden="true"
         className={cx(
@@ -165,7 +153,6 @@ function ContactCard(props: {
         )}
       />
 
-      {/* Tiny blue “spec” edge (subtle) */}
       <span
         aria-hidden="true"
         className={cx(
@@ -175,7 +162,6 @@ function ContactCard(props: {
         style={{ backgroundColor: "rgba(47,107,255,0.35)" }}
       />
 
-      {/* Icon plate */}
       <div
         className={cx(
           "grid h-10 w-10 place-items-center rounded-lg border border-border bg-bg",
@@ -202,18 +188,15 @@ function ContactCard(props: {
   );
 }
 
-export default function ContactPage() {
-  const mapsUrl = CONTACT_LINKS.mapsCoords(
-    CONTACT.address.lat,
-    CONTACT.address.lng
-  );
+export default function ContactPage({ lang = "en" }: { lang?: Lang }) {
+  const t = copy[lang].contact.page;
 
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
-  );
+  const mapsUrl = CONTACT_LINKS.mapsCoords(CONTACT.address.lat, CONTACT.address.lng);
 
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [mapExpanded, setMapExpanded] = useState(false);
   const [canHover, setCanHover] = useState(false);
+
   useEffect(() => {
     const m = window.matchMedia("(hover: hover) and (pointer: fine)");
     const apply = () => setCanHover(!!m.matches);
@@ -222,38 +205,36 @@ export default function ContactPage() {
     return () => m.removeEventListener?.("change", apply);
   }, []);
 
-  const mapHeightClass = mapExpanded
-    ? "h-[70vh] sm:h-[420px]"
-    : "h-[320px] sm:h-[420px]";
+  const mapHeightClass = mapExpanded ? "h-[70vh] sm:h-[420px]" : "h-[320px] sm:h-[420px]";
 
   const cards = useMemo(
     () => [
       {
-        title: "Phone",
+        title: t.cards.phone,
         value: CONTACT.phones[0] ?? "",
         href: CONTACT_LINKS.tel(CONTACT.phones[0] ?? ""),
         icon: <IconPhone className="h-5 w-5" />,
       },
       {
-        title: "Email",
+        title: t.cards.email,
         value: CONTACT.emailPrimary,
         href: CONTACT_LINKS.mailto(CONTACT.emailPrimary),
         icon: <IconMail className="h-5 w-5" />,
       },
       {
-        title: "Address",
-        value: "Open location",
+        title: t.cards.address,
+        value: t.map.openLocation,
         href: mapsUrl,
         icon: <IconPin className="h-5 w-5" />,
       },
       {
-        title: "Website",
+        title: t.cards.website,
         value: CONTACT.website,
         href: `https://${CONTACT.website}`,
         icon: <IconGlobe className="h-5 w-5" />,
       },
     ],
-    [mapsUrl]
+    [mapsUrl, t]
   );
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -274,7 +255,6 @@ export default function ContactPage() {
 
   return (
     <main className="relative bg-bg">
-      {/* Subtle CAD grid */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.10]"
@@ -288,55 +268,36 @@ export default function ContactPage() {
       />
 
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        {/* Header */}
         <motion.div initial="hidden" animate="show" variants={stagger}>
-          <motion.p
-            variants={fadeUp}
-            className="text-xs uppercase tracking-[0.22em] text-muted"
-          >
-            Contact
+          <motion.p variants={fadeUp} className="text-xs uppercase tracking-[0.22em] text-muted">
+            {t.kicker}
           </motion.p>
 
-          <motion.h1
-            variants={fadeUp}
-            className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-text"
-          >
-            Let’s talk about your project
+          <motion.h1 variants={fadeUp} className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-text">
+            {t.title}
           </motion.h1>
 
           <motion.div variants={fadeUp} className="mt-4 h-px w-44 bg-accent/70" />
 
-          <motion.p
-            variants={fadeUp}
-            className="mt-5 max-w-2xl text-[15px] leading-7 text-muted"
-          >
-            Share location, scope, and urgency. For urgent issues, call directly.
+          <motion.p variants={fadeUp} className="mt-5 max-w-2xl text-[15px] leading-7 text-muted">
+            {t.desc}
           </motion.p>
         </motion.div>
 
-        {/* Spec frame */}
         <section className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface">
-          {/* Top bar */}
           <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-surface2 px-5 py-4">
             <div className="flex items-center gap-3">
               <span className="inline-flex h-2 w-2 rounded-full bg-accent" />
-              <p className="text-sm font-semibold text-text">Contact Center</p>
+              <p className="text-sm font-semibold text-text">{t.centerTitle}</p>
             </div>
           </div>
 
-          {/* Map + Form */}
           <div className="grid lg:grid-cols-12">
-            {/* Left: Map + cards */}
             <div className="lg:col-span-7 border-b lg:border-b-0 lg:border-r border-white/10">
               <div className="p-4 sm:p-5">
-                {/* Map with mobile expand */}
                 <div className="overflow-hidden rounded-xl border border-border bg-bg">
                   <motion.div layout transition={{ duration: 0.25, ease: "easeOut" }}>
-                    <MapEmbed
-                      lat={CONTACT.address.lat}
-                      lng={CONTACT.address.lng}
-                      heightClass={mapHeightClass}
-                    />
+                    <MapEmbed lat={CONTACT.address.lat} lng={CONTACT.address.lng} heightClass={mapHeightClass} />
                   </motion.div>
                 </div>
 
@@ -344,7 +305,6 @@ export default function ContactPage() {
                   <span className="truncate">{CONTACT.address.line}</span>
 
                   <div className="flex items-center gap-3">
-                    {/* Mobile: expand/collapse */}
                     <button
                       type="button"
                       onClick={() => setMapExpanded((v) => !v)}
@@ -354,7 +314,7 @@ export default function ContactPage() {
                       )}
                       aria-pressed={mapExpanded}
                     >
-                      {mapExpanded ? "Collapse map" : "Expand map"}
+                      {mapExpanded ? t.map.collapse : t.map.expand}
                     </button>
 
                     <a
@@ -363,18 +323,12 @@ export default function ContactPage() {
                       rel="noreferrer"
                       className="shrink-0 hover:text-text transition"
                     >
-                      Open in Google Maps →
+                      {t.map.openGoogle}
                     </a>
                   </div>
                 </div>
 
-                {/* Animated cards */}
-                <motion.div
-                  initial="hidden"
-                  animate="show"
-                  variants={stagger}
-                  className="mt-4 grid gap-2 sm:grid-cols-2"
-                >
+                <motion.div initial="hidden" animate="show" variants={stagger} className="mt-4 grid gap-2 sm:grid-cols-2">
                   {cards.map((c) => (
                     <ContactCard
                       key={c.title}
@@ -395,16 +349,15 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Right: Form */}
             <div className="lg:col-span-5">
               <div className="p-4 sm:p-5">
                 <div className="flex items-end justify-between gap-3">
                   <div>
-                    <h2 className="text-sm font-bold text-text">Send a request</h2>
+                    <h2 className="text-sm font-bold text-text">{t.form.title}</h2>
                   </div>
 
                   <div className="text-[12px] text-muted">
-                    STATUS:{" "}
+                    {t.form.statusLabel}:{" "}
                     <span
                       className={cx(
                         status === "sent"
@@ -415,25 +368,25 @@ export default function ContactPage() {
                       )}
                     >
                       {status === "idle"
-                        ? "READY"
+                        ? t.form.status.ready
                         : status === "sending"
-                        ? "SENDING"
+                        ? t.form.status.sending
                         : status === "sent"
-                        ? "SENT"
-                        : "ERROR"}
+                        ? t.form.status.sent
+                        : t.form.status.error}
                     </span>
                   </div>
                 </div>
 
                 <form onSubmit={onSubmit} className="mt-5 space-y-3">
-                  <Field required label="Your name" name="name" placeholder="Your name" />
-                  <Field required label="Phone number" name="phone" type="tel" placeholder="Phone number" />
-                  <Field label="Email (optional)" name="email" type="email" placeholder="Email (optional)" />
+                  <Field required label={t.form.fields.nameLabel} name="name" placeholder={t.form.fields.namePh} />
+                  <Field required label={t.form.fields.phoneLabel} name="phone" type="tel" placeholder={t.form.fields.phonePh} />
+                  <Field label={t.form.fields.emailLabel} name="email" type="email" placeholder={t.form.fields.emailPh} />
                   <Field
                     required
-                    label="Project details"
+                    label={t.form.fields.detailsLabel}
                     name="message"
-                    placeholder="Project details (location, scope, urgency)"
+                    placeholder={t.form.fields.detailsPh}
                     rows={5}
                   />
 
@@ -448,18 +401,18 @@ export default function ContactPage() {
                     )}
                   >
                     {status === "sending"
-                      ? "Sending…"
+                      ? t.form.submit.sending
                       : status === "sent"
-                      ? "Sent ✓"
-                      : "Send request"}
+                      ? t.form.submit.sent
+                      : t.form.submit.idle}
                   </button>
 
                   {status === "error" && (
-                    <p className="text-[12px] text-red-300">
-                      Something failed. Please call or email directly.
-                    </p>
+                    <p className="text-[12px] text-red-300">{t.form.errorText}</p>
                   )}
                 </form>
+
+                {/* Optional: internal locale link back to home/contact not needed here */}
               </div>
             </div>
           </div>

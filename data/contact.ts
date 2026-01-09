@@ -2,7 +2,6 @@ export const CONTACT = {
   company: "Technical Service Company",
   address: {
     line: "Zh. Shartava Str. #25, Batumi, Georgia",
-    // ✅ Correct location (your coordinates)
     lat: 41.63124877209199,
     lng: 41.624612006746894,
   },

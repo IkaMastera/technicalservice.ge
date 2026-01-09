@@ -81,12 +81,12 @@ export default function ThemeToggle() {
         />
         {/* icon */}
         {isDark ? (
-          // moon (clean)
+          // moon (crisp crescent)
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-text/80">
             <path
-              d="M21 14.5A7.5 7.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5Z"
+              d="M21 12.8A8.2 8.2 0 1 1 11.2 3a6.6 6.6 0 1 0 9.8 9.8Z"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />

@@ -3,19 +3,23 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonPrimary } from "@/components/ui/button-primary";
+import { copy, type Lang } from "@/content/copy";
 
 type HeroVideoProps = {
   videoSrc?: string;
   posterSrc?: string;
   className?: string;
+  lang?: Lang;
 };
 
 export default function HeroVideo({
   videoSrc = "/media/images/main-page/main-hero-video1080.webm",
   posterSrc = "/media/images/main-page/main-hero-video1080.webp",
   className,
+  lang = "en",
 }: HeroVideoProps) {
   const reduceMotion = useReducedMotion();
+  const t = copy[lang].home.hero;
 
   return (
     <section className={`relative overflow-hidden ${className ?? ""}`}>
@@ -44,7 +48,7 @@ export default function HeroVideo({
 
         <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
 
-        {/* Blueprint grid overlay*/}
+        {/* Blueprint grid overlay */}
         <div
           className="absolute inset-0 opacity-[0.14]"
           aria-hidden="true"
@@ -64,19 +68,19 @@ export default function HeroVideo({
           transition={{ duration: 0.22 }}
           className="inline-flex flex-wrap items-center gap-2 rounded-xl border border-white/10 bg-surface/80 px-3 py-2 text-[11px] tracking-wide text-muted backdrop-blur"
         >
-          <span className="text-text">MEP SYSTEMS</span>
+          <span className="text-text">{t.strap[0]}</span>
           <span className="opacity-50">•</span>
-          <span>FIRE</span>
+          <span>{t.strap[1]}</span>
           <span className="opacity-50">•</span>
-          <span>ELECTRICAL</span>
+          <span>{t.strap[2]}</span>
           <span className="opacity-50">•</span>
-          <span>HVAC</span>
+          <span>{t.strap[3]}</span>
           <span className="opacity-50">•</span>
-          <span>CCTV</span>
+          <span>{t.strap[4]}</span>
           <span className="opacity-50">•</span>
-          <span>AUTOMATION</span>
+          <span>{t.strap[5]}</span>
           <span className="opacity-50">•</span>
-          <span>GEORGIA</span>
+          <span>{t.strap[6]}</span>
         </motion.div>
 
         {/* Main spec card */}
@@ -86,41 +90,36 @@ export default function HeroVideo({
           transition={{ duration: 0.26, delay: 0.06 }}
           className="mt-6 max-w-2xl rounded-2xl border border-white/10 bg-bg/70 p-5 backdrop-blur md:p-7"
         >
-          <div className="text-xs font-semibold tracking-wider text-muted">
-            SECTION 01 — OVERVIEW
-          </div>
+          <div className="text-xs font-semibold tracking-wider text-muted">{t.kicker}</div>
 
           <h1 className="mt-2 text-3xl font-semibold leading-tight text-text md:text-4xl">
-            Engineering, installation, and maintenance of critical building systems.
+            {t.title}
           </h1>
 
-          <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">
-            Fire safety, electrical, HVAC & ventilation, CCTV, and low-voltage automation —
-            executed with inspection-ready discipline and long-term reliability.
-          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">{t.desc}</p>
 
           {/* Trust line */}
           <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-muted">
             <span className="inline-flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-              Compliance-ready
+              {t.trustA}
             </span>
             <span className="opacity-40">•</span>
-            <span>Commercial & residential</span>
+            <span>{t.trustB}</span>
             <span className="opacity-40">•</span>
-            <span>Install + maintenance</span>
+            <span>{t.trustC}</span>
           </div>
 
           {/* Actions */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
             <ButtonPrimary className="button-primary--hero w-full sm:w-auto">
-              <Link href="/en/contact" className="block w-full text-center">
-                Request Quote
+              <Link href={`/${lang}/contact`} className="block w-full text-center">
+                {t.ctaContact}
               </Link>
             </ButtonPrimary>
-            
+
             <Link
-              href="/en/portfolio"
+              href={`/${lang}/portfolio`}
               className="
                 inline-flex w-full items-center justify-center
                 rounded-xl
@@ -134,7 +133,7 @@ export default function HeroVideo({
                 sm:w-auto
               "
             >
-              View Portfolio
+              {t.ctaPortfolio}
             </Link>
           </div>
         </motion.div>

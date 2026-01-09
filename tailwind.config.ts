@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         bg: "var(--color-bg)",
+        bg2: "var(--color-bg2)",
         surface: "var(--color-surface)",
         surface2: "var(--color-surface2)",
         accent: "var(--color-accent)",

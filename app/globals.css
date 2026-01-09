@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  /* Base canvas  NOT black */
+  /* Base canvas  */
   --color-bg: #2A3446;
 
-  /* Surfaces  lighter than bg */
+  --color-bg2: #303C52;
+
+  /* Surfaces  lighter */
   --color-surface: #323E54;
   --color-surface2: #3A4861;
 
@@ -30,6 +32,8 @@
   --color-bg: #F4F3F1;        
   --color-surface: #FFFFFF;
   --color-surface2: #EEEAE5;
+
+  --color-bg2: #ECEAE6;
 
   --color-text: #141414;
   --color-muted: #5B5B5B;
