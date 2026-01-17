@@ -148,7 +148,6 @@ export default function AboutSection({ lang = "en" }: { lang?: Lang }) {
 
           {/* layout */}
           <motion.div variants={{ hidden: {}, show: {} }} className="mt-10 grid gap-8 lg:grid-cols-12">
-            {/* left: capabilities */}
             <div className="lg:col-span-7">
               <div className="grid gap-3 sm:grid-cols-2">
                 {CAPABILITIES.map((c) => (

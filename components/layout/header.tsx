@@ -33,7 +33,6 @@ function getLocalePrefix(pathname: string | null) {
   return pathname.startsWith("/ka") ? "/ka" : "/en";
 }
 
-// ✅ ONLY change: special-case Home so it doesn't match every /en/* or /ka/*
 function isActive(pathname: string | null, href: string) {
   if (!pathname) return false;
 
@@ -178,7 +177,6 @@ export default function Header() {
                   >
                     {item.label}
 
-                    {/* Shared underline that slides between items */}
                     {active ? (
                       <motion.span
                         layoutId="nav-underline"

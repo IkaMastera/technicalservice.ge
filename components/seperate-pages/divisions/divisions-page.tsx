@@ -53,7 +53,6 @@ function StatusBadge({
 }
 
 function pickIcon(name: string) {
-  // simple deterministic mapping (no icon stored in copy)
   if (name.toLowerCase().includes("control4")) return Cpu;
   if (name.toLowerCase().includes("fiix")) return Wrench;
   return Building2;

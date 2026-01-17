@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { SERVICES } from "@/data/services";
-// If you also have portfolio slugs later, you’ll add them here too.
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://technicalservice.ge";

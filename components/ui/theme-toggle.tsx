@@ -61,7 +61,6 @@ export default function ThemeToggle() {
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
       )}
     >
-      {/* status ring (engineering indicator) */}
       <span
         aria-hidden="true"
         className={cx(
@@ -81,7 +80,7 @@ export default function ThemeToggle() {
         />
         {/* icon */}
         {isDark ? (
-          // moon (crisp crescent)
+          // moon
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-text/80">
             <path
               d="M21 12.8A8.2 8.2 0 1 1 11.2 3a6.6 6.6 0 1 0 9.8 9.8Z"
@@ -92,7 +91,7 @@ export default function ThemeToggle() {
             />
           </svg>
         ) : (
-          // sun (clean)
+          // sun
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-accent">
             <path
               d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"
@@ -109,12 +108,11 @@ export default function ThemeToggle() {
         )}
       </span>
 
-      {/* micro label (feels like a control panel, not a toy) */}
       <span className="hidden sm:block text-[12px] uppercase tracking-[0.22em] text-muted">
         {isDark ? "Dark" : "Light"}
       </span>
 
-      {/* slider (precision switch) */}
+      {/* slider */}
       <span
         aria-hidden="true"
         className={cx(

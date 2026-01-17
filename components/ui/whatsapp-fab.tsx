@@ -7,7 +7,6 @@ function cx(...parts: Array<string | false | null | undefined>) {
 }
 
 function WhatsAppIcon({ className }: { className?: string }) {
-  // Crisp WhatsApp mark, renders clean at 16–32px.
   return (
     <svg
       viewBox="0 0 24 24"
@@ -36,11 +35,10 @@ export default function WhatsAppFab({
   message = "Hello TSC — I’d like a quote. Please contact me.",
   className,
 }: {
-  phoneE164?: string; // must be E.164 format like +995...
+  phoneE164?: string;
   message?: string;
   className?: string;
 }) {
-  // wa.me wants digits only
   const digits = useMemo(() => phoneE164.replace(/[^\d]/g, ""), [phoneE164]);
 
   const href = useMemo(() => {
@@ -50,7 +48,6 @@ export default function WhatsAppFab({
 
   return (
     <>
-      {/* Local keyframes (no global CSS needed) */}
       <style>{`
         @keyframes tsc-fab-pulse {
           0% { transform: translateZ(0) scale(1); box-shadow: 0 0 0 0 rgba(245,179,1,0.22); }
@@ -72,19 +69,13 @@ export default function WhatsAppFab({
         rel="noopener noreferrer"
         aria-label="Chat with TSC on WhatsApp"
         className={cx(
-          // position
           "fixed z-[60] right-4 bottom-4 md:right-6 md:bottom-6",
-          // button shell
           "group grid h-14 w-14 place-items-center rounded-2xl",
           "bg-surface border border-border",
-          // subtle engineered glow (accent, not green)
           "shadow-[0_14px_40px_rgba(0,0,0,0.45)]",
           "transition-transform duration-200 will-change-transform",
-          // base pulse (minimal)
           "motion-safe:[animation:tsc-fab-pulse_2.6s_ease-out_infinite]",
-          // hover: a bit more “alive”
           "hover:-translate-y-0.5",
-          // important: don’t show the green circle
           className
         )}
       >
@@ -100,15 +91,12 @@ export default function WhatsAppFab({
           <WhatsAppIcon
             className={cx(
               "h-6 w-6",
-              // TSC color system: muted -> accent on hover
               "text-muted group-hover:text-accent transition-colors duration-200",
-              // vibration only on hover
               "motion-safe:group-hover:[animation:tsc-fab-vibe_0.28s_linear_infinite]"
             )}
           />
         </span>
 
-        {/* tiny status dot (optional but looks “system-y”) */}
         <span
           aria-hidden="true"
           className={cx(

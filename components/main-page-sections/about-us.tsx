@@ -61,7 +61,6 @@ export default function AboutUsSection({ lang = "en" }: { lang?: Lang }) {
     },
   };
 
-  // ✅ minimal fix: keep readonly arrays as-is (no casting to mutable arrays)
   const stats: ReadonlyArray<Stat> = t.stats;
   const principles: ReadonlyArray<Principle> = t.principles;
 

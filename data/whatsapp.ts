@@ -7,6 +7,5 @@ export const TSC_WHATSAPP = {
 
 export function buildWhatsAppUrl(phoneE164Digits: string, message: string) {
   const text = encodeURIComponent(message);
-  // wa.me works everywhere and opens app on mobile
   return `https://wa.me/${phoneE164Digits}?text=${text}`;
 }

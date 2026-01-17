@@ -13,7 +13,6 @@ export default function TscLogo({ title = "TSC", ...props }: Props) {
       {...props}
     >
       <title>{title}</title>
-      {/* Converted .st0 fill to currentColor */}
       <g fill="currentColor">
         <path d="M39.7,52.9c1.8-3,4.1-4.7,7.7-5.4c6.6-1.3,11.9,2.1,13.6,8.6c1,3.9,1.9,5,4.8,5c0,0,0,0,0.1,0
           c1.8,0,3-0.5,3.8-1.5c0.9-1.1,1.1-2.9,0.5-5.3c-1.5-6.5-5.8-11.1-12.2-13.7c-2.7-1-4.9-1.5-7.6-1.5c-1,0-2.2,0.1-3.5,0.2

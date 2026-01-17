@@ -38,7 +38,6 @@ export default function PortfolioGrid() {
     return portfolioItems.filter((p) => p.category === active);
   }, [active]);
 
-  // ✅ If 4 or fewer, force a BIG showcase layout (2 large rows)
   const forceShowcase4 = filtered.length <= 4;
 
   const featured = useMemo(() => filtered.filter((x) => x.featured).slice(0, 4), [filtered]);
@@ -100,7 +99,6 @@ export default function PortfolioGrid() {
 
         {/* CONTENT */}
         {forceShowcase4 ? (
-          // ✅ 4 items = 2 big tiles row + 2 big tiles row (dominant, not thumbnails)
           <div className="mt-6 grid grid-cols-12 gap-6">
             {filtered[0] ? (
               <div className="col-span-12 lg:col-span-6">
@@ -128,7 +126,6 @@ export default function PortfolioGrid() {
           </div>
         ) : (
           <>
-            {/* Featured (4 visible: 1 big + 3 stacked) */}
             {featured.length ? (
               <div className="mt-6 grid gap-6 lg:grid-cols-12">
                 <div className="lg:col-span-7">
@@ -142,7 +139,6 @@ export default function PortfolioGrid() {
               </div>
             ) : null}
 
-            {/* Rest grid */}
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.div
                 key={active}

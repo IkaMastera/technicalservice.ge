@@ -1,6 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
 
-// ✅ Import your icon components (create these files in components/icons/services/)
 import BuildingArchitectureIcon from "@/components/icons/services/BuildingArchitectureIcon";
 import FireSystemSignalIcon from "@/components/icons/services/FireSystemSignalIcon";
 import GeneratorIcon from "@/components/icons/services/GeneratorIcon";

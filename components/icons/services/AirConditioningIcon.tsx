@@ -14,7 +14,6 @@ export default function AirConditioningIcon({ title = "Air conditioning", ...pro
     >
       <title>{title}</title>
 
-      {/* ✅ IMPORTANT: this makes it themeable via text-* classes */}
       <g fill="currentColor">
         	
         <path  d="M215,512c-5.9-2.4-9.9-6.9-13.2-12.2c-5.7-9-11.6-17.9-17.7-26.6c-1.5-2.2-3.6-4.4-6-5.8

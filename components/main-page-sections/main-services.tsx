@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { SERVICES } from "@/data/services";
-import { ButtonPrimary } from "../ui/button-primary";
 import { copy } from "@/content/copy";
 
 type Lang = "en" | "ka";

@@ -411,8 +411,6 @@ export default function ContactPage({ lang = "en" }: { lang?: Lang }) {
                     <p className="text-[12px] text-red-300">{t.form.errorText}</p>
                   )}
                 </form>
-
-                {/* Optional: internal locale link back to home/contact not needed here */}
               </div>
             </div>
           </div>

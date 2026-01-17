@@ -1,6 +1,6 @@
 export type ServiceMedia = {
   slug: string;
-  count: number; // number of images available
+  count: number;
 };
 
 export const SERVICE_MEDIA: Record<string, ServiceMedia> = {

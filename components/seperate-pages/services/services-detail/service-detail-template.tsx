@@ -118,7 +118,6 @@ export default function ServiceDetailTemplate({
 
         <motion.section variants={up} className="mt-8">
           <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
-            {/* LEFT: compact service identity (sticky on desktop) */}
             <aside className="lg:col-span-3 lg:sticky lg:top-24">
               <div className="rounded-lg border border-border bg-surface p-5">
                 <div className="flex items-start gap-3">
@@ -199,7 +198,6 @@ export default function ServiceDetailTemplate({
                         </>
                       )}
 
-                      {/* plate label bottom-left (industrial stamp) */}
                       <div className="absolute left-3 bottom-3 z-10 rounded-md border border-white/15 bg-bg/70 px-3 py-1 text-[12px] text-text">
                         Plate {String(idx + 1).padStart(2, "0")}
                       </div>

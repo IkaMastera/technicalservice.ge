@@ -47,12 +47,10 @@ export default function LanguageSwitcher() {
   const nextEn = useMemo(() => swapLang(pathname, "en"), [pathname]);
   const nextKa = useMemo(() => swapLang(pathname, "ka"), [pathname]);
 
-  /* close on route change (safe, no warning) */
   useEffect(() => {
     if (open) setOpen(false);
-  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
-  /* close on outside click */
   useEffect(() => {
     if (!open) return;
 
