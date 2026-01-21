@@ -1,20 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonPrimary } from "@/components/ui/button-primary";
 import { copy, type Lang } from "@/content/copy";
 
 type HeroVideoProps = {
-  videoSrc?: string;
   posterSrc?: string;
   className?: string;
   lang?: Lang;
 };
 
 export default function HeroVideo({
-  videoSrc = "/media/images/main-page/hero-bg.webm",
-  posterSrc = "/media/images/main-page/hero-bg.webp",
+  posterSrc = "/media/images/main-page/main-hero.webp",
   className,
   lang = "en",
 }: HeroVideoProps) {
@@ -23,53 +22,60 @@ export default function HeroVideo({
 
   return (
     <section className={`relative min-h-[100vh] overflow-hidden ${className ?? ""}`}>
-      {/* Background media */}
-      <div className="absolute inset-0 bg-black">
-        {/* Poster fallback (also helps during video load) */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${posterSrc})` }}
-          aria-hidden="true"
-        />
-
-        {!reduceMotion && (
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={posterSrc}
-            aria-hidden="true"
-          >
-            <source src={videoSrc} type="video/webm" />
-          </video>
-        )}
-
-        {/* LEFT readability mask ONLY (right side stays fully clean) */}
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#0B0F14]">
+        {/* Base depth */}
         <div
           className="absolute inset-0"
           aria-hidden="true"
           style={{
             background:
-              "linear-gradient(90deg, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.88) 28%, rgba(0,0,0,0.55) 42%, rgba(0,0,0,0.00) 52%, rgba(0,0,0,0.00) 100%)",
+              "linear-gradient(180deg, rgba(18,25,38,0.92) 0%, rgba(11,15,20,1) 100%)",
           }}
         />
 
-        {/* Subtle blueprint grid ONLY on left area */}
+        {/* Blueprint image */}
+        <Image
+          src={posterSrc}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={[
+            "absolute inset-0 object-cover opacity-[0.58] md:opacity-[0.62]",
+            !reduceMotion ? "hero-cad-drift" : "",
+          ].join(" ")}
+        />
+
         <div
-          className="absolute inset-y-0 left-0 w-[58%] opacity-[0.06]"
+          className="absolute inset-0"
           aria-hidden="true"
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-            maskImage: "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
-            WebkitMaskImage:
-              "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+            background:
+              "radial-gradient(circle at 55% 35%, rgba(11,15,20,0.10) 0%, rgba(11,15,20,0.55) 70%, rgba(11,15,20,0.82) 100%)",
           }}
         />
+
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(11,15,20,0.96) 0%, rgba(11,15,20,0.90) 28%, rgba(11,15,20,0.58) 42%, rgba(11,15,20,0.00) 52%, rgba(11,15,20,0.00) 100%)",
+          }}
+        />
+
+        {!reduceMotion ? (
+          <div
+            className="absolute inset-y-0 left-0 w-[58%] hero-cad-grid"
+            aria-hidden="true"
+          />
+        ) : (
+          <div
+            className="absolute inset-y-0 left-0 w-[58%] hero-cad-grid hero-cad-grid--static"
+            aria-hidden="true"
+          />
+        )}
       </div>
 
       {/* Content */}
@@ -130,10 +136,7 @@ export default function HeroVideo({
             {/* Actions */}
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
               <ButtonPrimary className="button-primary--hero w-full sm:w-auto">
-                <Link
-                  href={`/${lang}/contact`}
-                  className="block w-full text-center text-white"
-                >
+                <Link href={`/${lang}/contact`} className="block w-full text-center text-white">
                   {t.ctaContact}
                 </Link>
               </ButtonPrimary>
