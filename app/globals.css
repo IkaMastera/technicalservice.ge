@@ -2,52 +2,51 @@
 
 @theme {
   /* Base canvas  */
-  --color-bg: #2A3446;
+  --color-bg: #080706;
+  --color-bg2: #0F0E0C;
 
-  --color-bg2: #303C52;
-
-  /* Surfaces  lighter */
-  --color-surface: #323E54;
-  --color-surface2: #3A4861;
+  /* Surfaces */
+  --color-surface: #161410;
+  --color-surface2: #1C1816;
 
   /* Text */
-  --color-text: #F0F4FB;
-  --color-muted: #C2CCDD;
+  --color-text: #FFF8F0;
+  --color-muted: #8A6A50;
 
   /* Borders */
-  --color-border: rgba(255,255,255,0.18);
+  --color-border: rgba(255, 122, 53, 0.12);
 
   /* Accents */
-  --color-accent: #FFB020;
-  --color-accent2: #3A74FF;
+  --color-accent: #FF7A35;
+  --color-accent2: #E05A15;
 
   /* Header */
-  --color-header: #263044;
-  --color-headerTint: rgba(255,255,255,0.06);
-  --color-headerBorder: rgba(255,255,255,0.20);
+  --color-header: #0A0906;
+  --color-headerTint: rgba(255, 122, 53, 0.06);
+  --color-headerBorder: rgba(255, 122, 53, 0.15);
 }
 
-/* Light Mode  */
+/* Light Mode */
 :root[data-theme="light"] {
-  --color-bg: #F4F3F1;        
-  --color-surface: #FFFFFF;
-  --color-surface2: #EEEAE5;
+  --color-bg: #FDFAF6;
+  --color-surface: #FEF0E6;
+  --color-surface2: #FAE8D6;
 
-  --color-bg2: #ECEAE6;
+  --color-bg2: #F5EDE2;
 
-  --color-text: #141414;
-  --color-muted: #5B5B5B;
+  --color-text: #1C1008;
+  --color-muted: #6B5040;
 
-  --color-border: rgba(20, 20, 20, 0.12);
+  --color-border: rgba(192, 96, 24, 0.12);
 
-  --color-accent: #B45309;    /* copper */
-  --color-accent2: #334155;   /* graphite-blue */
+  --color-accent: #C06018;
+  --color-accent2: #FF7A35;
 
-  --color-success: #1F7A5B;
+  --color-success: #15803D;
 
-  --color-header: #F1EFEC;
-  --color-headerTint: rgba(180, 83, 9, 0.05);
-  --color-headerBorder: rgba(20, 20, 20, 0.10);
+  --color-header: #FDFAF6;
+  --color-headerTint: rgba(192, 96, 24, 0.04);
+  --color-headerBorder: rgba(192, 96, 24, 0.12);
 }
 
 html,
@@ -65,8 +64,8 @@ body {
   border-radius: 12px;
   padding: 12px 24px;
 
-  background: #ffb020;
-  color: #0b0f14;
+  background: #ff7a35;
+  color: #ffffff;
 
   font-weight: 700;
   font-size: 14px;
@@ -141,7 +140,7 @@ body {
 /* accessibility */
 .button-primary:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 176, 32, 0.35), 0 12px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 122, 53, 0.35), 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

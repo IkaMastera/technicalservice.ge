@@ -59,12 +59,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
 
+        {/* Spline web component — needed for the hero 3D scene */}
+        <Script
+          type="module"
+          src="https://unpkg.com/@splinetool/viewer@1.12.81/build/spline-viewer.js"
+          strategy="lazyOnload"
+        />
+
         <Header />
         <main>{children}</main>
 
         <WhatsAppFab
           phoneE164="+995511223366"
-          message="Hello TSC — I’d like a technical consultation. Please contact me."
+          message="Hello TSC — I'd like a technical consultation. Please contact me."
         />
 
         <Footer />
