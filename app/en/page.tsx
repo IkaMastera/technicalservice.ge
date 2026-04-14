@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-import AboutUsSection from "@/components/main-page-sections/about-us";
+import HeroSlider from "@/components/main-page-sections/hero-slider";
 import HeroVideo from "@/components/main-page-sections/main-hero";
-import PortfolioPreview from "@/components/main-page-sections/main-portfolio";
-import ServicesGridSection from "@/components/main-page-sections/main-services";
+import WhyTSCSection from "@/components/main-page-sections/why-tsc-section";
+import AboutUsSection from "@/components/main-page-sections/about-us";
 import ContactUsSection from "@/components/main-page-sections/contact-us";
 
 export const metadata: Metadata = {
@@ -50,10 +50,10 @@ export const metadata: Metadata = {
 export default function EnHomePage() {
   return (
     <>
+      <HeroSlider lang="en" />
       <HeroVideo lang="en" />
+      <WhyTSCSection lang="en" />
       <AboutUsSection lang="en" />
-      <ServicesGridSection lang="en" />
-      <PortfolioPreview lang="en" />
       <ContactUsSection lang="en" />
     </>
   );

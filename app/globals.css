@@ -49,7 +49,11 @@
   --color-headerBorder: rgba(192, 96, 24, 0.12);
 }
 
-html,
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
 body {
   height: 100%;
 }

@@ -5,6 +5,8 @@ import { inter, manrope } from "@/lib/fonts";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import WhatsAppFab from "@/components/ui/whatsapp-fab";
+import BackToTop from "@/components/ui/back-to-top";
+import SmoothScrollProvider from "@/components/ui/smooth-scroll-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://technicalservice.ge"),
@@ -59,15 +61,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
 
-        {/* Spline web component — needed for the hero 3D scene */}
         <Script
           type="module"
           src="https://unpkg.com/@splinetool/viewer@1.12.81/build/spline-viewer.js"
           strategy="lazyOnload"
         />
 
+        <SmoothScrollProvider>
         <Header />
-        <main>{children}</main>
+
+        <main>
+          <div className="h-16" aria-hidden="true" />
+          {children}
+        </main>
+
+        <BackToTop />
 
         <WhatsAppFab
           phoneE164="+995511223366"
@@ -75,6 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   );
