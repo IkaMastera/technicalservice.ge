@@ -8,7 +8,7 @@ import { portfolioItems } from "@/data/portfolio";
 import type { Lang } from "@/content/copy";
 
 const SLIDES = portfolioItems.filter((x) => x.featured);
-const AUTO_MS = 4000;
+const AUTO_MS = 3000;
 
 type Props = { lang?: Lang };
 
@@ -45,26 +45,26 @@ const BRAND_CONTENT = {
     {
       kicker: "MEP ინჟინერია · საქართველო",
       headline: "არაფერია შეუძლებელი.",
-      sub: "ყველაფერი ნებადართულია.",
+      sub: "ყველაფერი თქვენს ხელშია.",
       body: "ვაპროექტებთ, ვამონტაჟებთ და ვემსახურებით სახანძრო, ელექტრო, HVAC და დაბალი ძაბვის სისტემებს კომერციული და საცხოვრებელი ობიექტებისთვის.",
     },
     {
       kicker: "სახანძრო · ელექტრო · HVAC",
       headline: "სანდო პარტნიორი",
-      sub: "საქართველოს ლენდმარკებისთვის.",
+      sub: "საქართველოს ინფრასტრუქტურისთვის.",
       body: "17 წლის კომბინირებული საინჟინრო გამოცდილება. 100+ პროექტი ინსპექციისთვის მზად ჩაბარებული.",
     },
     {
       kicker: "ინსპექციისთვის მზად",
       headline: "ყველა სისტემა,",
-      sub: "რომელსაც ვაშენებთ — გადის ინსპექციას.",
+      sub: "რომელსაც ვაშენებთ - გადის ინსპექციას.",
       body: "დოკუმენტაციის დისციპლინა, სუფთა ჩაბარება და გრძელვადიანი სერვისი. საინჟინრო სტანდარტი პირველი დღიდან.",
     },
     {
       kicker: "ინტეგრაციის დისციპლინა",
-      headline: "ხანძარი. ელექტრო. HVAC.",
-      sub: "ქაოსური გაყვანილობის გარეშე.",
-      body: "ყველა MEP სისტემას ვაერთიანებთ ერთ კოორდინირებულ გადაწყვეტაში — მონტაჟიდან მომსახურებამდე.",
+      headline: "სახანძრო, ელექტრო, HVAC გაყვანილობა",
+      sub: "ზედმეტი ქაოსის გარეშე.",
+      body: "ყველა MEP სისტემას ვაერთიანებთ ერთ კოორდინირებულ გადაწყვეტაში - მონტაჟიდან მომსახურებამდე.",
     },
   ],
 };
@@ -203,10 +203,10 @@ export default function HeroSlider({ lang = "en" }: Props) {
               className="object-cover"
               quality={90}
             />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,7,6,0.70) 0%, rgba(8,7,6,0.25) 35%, rgba(8,7,6,0.25) 65%, rgba(8,7,6,0.95) 100%)" }} />
-            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(255,122,53,0.18) 0%, transparent 65%)" }} />
-            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(8,7,6,0.65) 100%)" }} />
-            <div className="absolute inset-y-0 right-0 w-36 hidden md:block" style={{ background: "linear-gradient(90deg, transparent, rgba(8,7,6,0.90))" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(7,9,15,0.75) 0%, rgba(7,9,15,0.30) 35%, rgba(7,9,15,0.30) 65%, rgba(7,9,15,0.95) 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--color-accent) 15%, transparent) 0%, transparent 65%)" }} />
+            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(7,9,15,0.60) 100%)" }} />
+            <div className="absolute inset-y-0 right-0 w-36 hidden md:block" style={{ background: "linear-gradient(90deg, transparent, rgba(7,9,15,0.90))" }} />
           </motion.div>
         </AnimatePresence>
 
@@ -237,7 +237,7 @@ export default function HeroSlider({ lang = "en" }: Props) {
                 animate={{
                   height: i === index ? 36 : 14,
                   opacity: i === index ? 1 : 0.2,
-                  backgroundColor: i === index ? "#FF7A35" : "rgba(255,255,255,0.5)",
+                  backgroundColor: i === index ? "#1565C0" : "rgba(255,255,255,0.5)",
                   width: i === index ? 2 : 1,
                 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -254,15 +254,15 @@ export default function HeroSlider({ lang = "en" }: Props) {
       {/* ══ RIGHT — brand content panel 45% ══ */}
       <div className="relative flex h-full w-full flex-col bg-[#080706] md:w-[45%] flex-shrink-0 overflow-hidden">
 
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 15% 60%, rgba(255,122,53,0.05) 0%, transparent 55%)" }} />
-        <div className="absolute top-0 left-0 right-16 h-px" style={{ background: "linear-gradient(90deg, rgba(255,122,53,0.45) 0%, transparent 80%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 15% 60%, color-mix(in srgb, var(--color-accent) 5%, transparent) 0%, transparent 55%)" }} />
+        <div className="absolute top-0 left-0 right-16 h-px" style={{ background: "linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 45%, transparent) 0%, transparent 80%)" }} />
 
         {/* Counter — large current number with diagonal slash and total */}
         <div className="relative z-10 flex items-start justify-end px-10 pt-20 lg:px-14">
           <div className="relative flex items-start gap-1">
             {/* Large animated current number */}
             <Clip slideKey={"counter-" + index} delay={0}>
-              <span className="font-mono text-5xl font-thin leading-none tracking-tight text-white/70">
+              <span className="font-mono text-5xl font-thin leading-none tracking-tight text-text/70">
                 {pad(index + 1)}
               </span>
             </Clip>
@@ -293,13 +293,13 @@ export default function HeroSlider({ lang = "en" }: Props) {
           </Clip>
 
           <Clip slideKey={brand.headline} delay={0.12} exitDelay={0.04} className="mb-1">
-            <h2 className="text-4xl font-bold leading-[1.05] tracking-tight text-white lg:text-5xl xl:text-[3.2rem]">
+            <h2 className="pb-2 text-4xl font-bold leading-[1.05] tracking-tight text-text lg:text-5xl xl:text-[3.2rem]">
               {brand.headline}
             </h2>
           </Clip>
 
           <Clip slideKey={brand.sub} delay={0.18} exitDelay={0.02} className="mb-6">
-            <h3 className="text-4xl font-bold leading-[1.05] tracking-tight text-accent lg:text-5xl xl:text-[3.2rem]">
+            <h3 className="pb-3 text-4xl font-bold leading-[1.05] tracking-tight text-accent lg:text-5xl xl:text-[3.2rem]">
               {brand.sub}
             </h3>
           </Clip>

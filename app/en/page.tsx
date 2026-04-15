@@ -51,8 +51,8 @@ export default function EnHomePage() {
   return (
     <>
       <HeroSlider lang="en" />
-      <HeroVideo lang="en" />
       <WhyTSCSection lang="en" />
+      <HeroVideo lang="en" />
       <AboutUsSection lang="en" />
       <ContactUsSection lang="en" />
     </>

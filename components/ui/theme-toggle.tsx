@@ -75,7 +75,7 @@ export default function ThemeToggle() {
             isDark ? "opacity-0" : "opacity-100"
           )}
           style={{
-            boxShadow: "inset 0 0 0 1px rgba(245,179,1,0.35)",
+            boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, transparent)",
           }}
         />
         {/* icon */}

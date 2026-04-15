@@ -49,19 +49,10 @@ export default function ContactUsSection({ lang = "en" }: { lang?: Lang }) {
     <section id="contact" className="relative border-t border-border bg-bg">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(255,255,255,0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.10) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
-      <div
-        aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(900px 520px at 12% 10%, rgba(255,176,32,0.08), transparent 60%), radial-gradient(900px 520px at 88% 18%, rgba(255,255,255,0.03), transparent 60%)",
+            "radial-gradient(900px 520px at 12% 10%, rgba(70, 130, 180,0.08), transparent 60%), radial-gradient(900px 520px at 88% 18%, rgba(255,255,255,0.03), transparent 60%)",
         }}
       />
 

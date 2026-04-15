@@ -8,7 +8,7 @@ export function PortfolioBackground() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
       {/* Depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(1200px_760px_at_18%_10%,rgba(255,176,32,0.11),transparent_60%),radial-gradient(980px_720px_at_86%_18%,rgba(47,107,255,0.10),transparent_62%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(1200px_760px_at_18%_10%,rgba(70, 130, 180,0.08),transparent_60%),radial-gradient(980px_720px_at_86%_18%,rgba(47,107,255,0.10),transparent_62%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.10),transparent_28%,rgba(0,0,0,0.28))]" />
 
       {/* BIG grid (very visible) */}

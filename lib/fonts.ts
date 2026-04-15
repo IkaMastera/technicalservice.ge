@@ -1,4 +1,4 @@
-import { Inter, Manrope } from "next/font/google";
+import { Inter, Manrope, Noto_Sans_Georgian } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],

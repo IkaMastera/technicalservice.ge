@@ -178,7 +178,7 @@ export default function Header() {
               transition={{ duration: 0.18, ease: "easeOut" }}
             >
               <div className={cx("mx-3 mt-2 rounded-2xl overflow-hidden","border border-border bg-surface","shadow-[0_20px_60px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,122,53,0.08)]")}>
-                <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(255,122,53,0.5), transparent)" }} />
+                <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(0, 71, 171), transparent)" }} />
                 <nav className="flex flex-col p-2" aria-label="Mobile navigation">
                   {NAV.map((item) => {
                     const href   = `${locale}${item.href}`;
@@ -196,7 +196,7 @@ export default function Header() {
                 </nav>
                 <div className="px-3 pb-3">
                   <Link href={`${locale}/contact`} onClick={closeMenu}
-                    className={cx("flex w-full items-center justify-center rounded-xl py-3","bg-accent text-white text-sm font-bold","shadow-[0_4px_14px_rgba(255,122,53,0.3)]","hover:bg-accent2 transition-colors")}
+                    className={cx("flex w-full items-center justify-center rounded-xl py-3","bg-accent text-white text-sm font-bold","shadow-[0_4px_14px_rgba(0, 71, 171)]","hover:bg-accent2 transition-colors")}
                   >
                     Contact Us
                   </Link>

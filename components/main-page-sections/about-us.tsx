@@ -70,23 +70,13 @@ export default function AboutUsSection({ lang = "en" }: { lang?: Lang }) {
       className="relative overflow-hidden border-t border-white/10 bg-bg"
       aria-label={t.ariaLabel}
     >
-      {/* subtle blueprint grid texture */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.08]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-      />
       {/* soft depth gradient */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(900px 420px at 20% 15%, rgba(255,176,32,0.08), transparent 60%), radial-gradient(800px 420px at 80% 30%, rgba(47,107,255,0.06), transparent 62%)",
+            "radial-gradient(900px 420px at 20% 15%, rgba(70, 130, 180,0.08), transparent 60%), radial-gradient(800px 420px at 80% 30%, rgba(47,107,255,0.06), transparent 62%)",
         }}
       />
 

@@ -1,52 +1,66 @@
 @import "tailwindcss";
 
+/*
+  ── COBALT STEEL — Dark mode (default) ──
+  Precision engineering meets aerospace.
+  Cold, authoritative, ultra-premium.
+*/
+/*
+  Georgian font variable — applied in app/ka/layout.tsx via lang="ka"
+  Uses Noto Sans Georgian from Google Fonts, self-hosted by Next.js
+*/
 @theme {
-  /* Base canvas  */
-  --color-bg: #080706;
-  --color-bg2: #0F0E0C;
+  --color-bg:       #07090F;
+  --color-bg2:      #0B0E18;
 
-  /* Surfaces */
-  --color-surface: #161410;
-  --color-surface2: #1C1816;
+  --color-surface:  #0E1420;
+  --color-surface2: #131B2C;
 
-  /* Text */
-  --color-text: #FFF8F0;
-  --color-muted: #8A6A50;
+  --color-text:     #E8EEF7;
+  --color-muted:    #5A7EA8;
 
-  /* Borders */
-  --color-border: rgba(255, 122, 53, 0.12);
+  --color-border:   rgba(30, 136, 229, 0.14);
 
-  /* Accents */
-  --color-accent: #FF7A35;
-  --color-accent2: #E05A15;
+  --color-accent:   #1E88E5;
+  --color-accent2:  #1565C0;
 
-  /* Header */
-  --color-header: #0A0906;
-  --color-headerTint: rgba(255, 122, 53, 0.06);
-  --color-headerBorder: rgba(255, 122, 53, 0.15);
+  --color-success:  #00C853;
+
+  --color-header:       #06080E;
+  --color-headerTint:   rgba(30, 136, 229, 0.06);
+  --color-headerBorder: rgba(30, 136, 229, 0.18);
 }
 
-/* Light Mode */
+/* ── COBALT STEEL — Light mode ── */
 :root[data-theme="light"] {
-  --color-bg: #FDFAF6;
-  --color-surface: #FEF0E6;
-  --color-surface2: #FAE8D6;
+  --color-bg:       #F4F7FC;
+  --color-bg2:      #EBF0F8;
 
-  --color-bg2: #F5EDE2;
+  --color-surface:  #FFFFFF;
+  --color-surface2: #EEF3FA;
 
-  --color-text: #1C1008;
-  --color-muted: #6B5040;
+  --color-text:     #0A1628;
+  --color-muted:    #4A6FA5;
 
-  --color-border: rgba(192, 96, 24, 0.12);
+  --color-border:   rgba(30, 136, 229, 0.14);
 
-  --color-accent: #C06018;
-  --color-accent2: #FF7A35;
+  --color-accent:   #1565C0;
+  --color-accent2:  #1E88E5;
 
-  --color-success: #15803D;
+  --color-success:  #2E7D32;
 
-  --color-header: #FDFAF6;
-  --color-headerTint: rgba(192, 96, 24, 0.04);
-  --color-headerBorder: rgba(192, 96, 24, 0.12);
+  --color-header:       #F4F7FC;
+  --color-headerTint:   rgba(21, 101, 192, 0.04);
+  --color-headerBorder: rgba(21, 101, 192, 0.14);
+}
+
+/* ── Mersad Variable — Georgian font, KA pages only ── */
+@font-face {
+  font-family: "Mersad";
+  src: url("/fonts/mersad/Mersad-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 html {
@@ -58,7 +72,7 @@ body {
   height: 100%;
 }
 
-/* MAIN BUTTON ANIMATION */
+/* ── PRIMARY BUTTON — Cobalt Steel ── */
 .button-primary {
   position: relative;
   display: inline-flex;
@@ -68,7 +82,7 @@ body {
   border-radius: 12px;
   padding: 12px 24px;
 
-  background: #ff7a35;
+  background: #1E88E5;
   color: #ffffff;
 
   font-weight: 700;
@@ -111,10 +125,8 @@ body {
   position: absolute;
   inset: -20% -60%;
   pointer-events: none;
-
   opacity: 0;
   transform: translateX(-40%) skewX(-12deg);
-
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0) 0%,
@@ -123,7 +135,6 @@ body {
     rgba(255, 255, 255, 0.18) 55%,
     rgba(0, 0, 0, 0) 100%
   );
-
   filter: blur(10px);
 }
 
@@ -133,18 +144,13 @@ body {
 }
 
 @keyframes tsc-btn-sweep {
-  0% {
-    transform: translateX(-40%) skewX(-12deg);
-  }
-  100% {
-    transform: translateX(40%) skewX(-12deg);
-  }
+  0%   { transform: translateX(-40%) skewX(-12deg); }
+  100% { transform: translateX(40%)  skewX(-12deg); }
 }
 
-/* accessibility */
 .button-primary:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 122, 53, 0.35), 0 12px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.40), 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

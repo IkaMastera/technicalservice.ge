@@ -50,9 +50,9 @@ export default function WhatsAppFab({
     <>
       <style>{`
         @keyframes tsc-fab-pulse {
-          0% { transform: translateZ(0) scale(1); box-shadow: 0 0 0 0 rgba(245,179,1,0.22); }
-          70% { transform: translateZ(0) scale(1.01); box-shadow: 0 0 0 14px rgba(245,179,1,0.0); }
-          100% { transform: translateZ(0) scale(1); box-shadow: 0 0 0 0 rgba(245,179,1,0.0); }
+          0% { transform: translateZ(0) scale(1); box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 22%, transparent); }
+          70% { transform: translateZ(0) scale(1.01); box-shadow: 0 0 0 14px transparent; }
+          100% { transform: translateZ(0) scale(1); box-shadow: 0 0 0 0 transparent; }
         }
         @keyframes tsc-fab-vibe {
           0%, 100% { transform: translateZ(0) translateX(0); }

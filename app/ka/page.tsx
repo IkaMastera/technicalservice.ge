@@ -51,8 +51,8 @@ export default function KaHomePage() {
   return (
     <>
       <HeroSlider lang="ka" />
-      <HeroVideo lang="ka" />
       <WhyTSCSection lang="ka" />
+      <HeroVideo lang="ka" />
       <AboutUsSection lang="ka" />
       <ContactUsSection lang="ka" />
     </>

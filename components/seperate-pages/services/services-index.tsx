@@ -80,7 +80,7 @@ export default function ServicesIndex() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(1000px 520px at 15% 10%, rgba(255,176,32,0.08), transparent 60%), radial-gradient(900px 480px at 85% 20%, rgba(255,255,255,0.03), transparent 62%)",
+            "radial-gradient(1000px 520px at 15% 10%, rgba(70, 130, 180,0.08), transparent 60%), radial-gradient(900px 480px at 85% 20%, rgba(255,255,255,0.03), transparent 62%)",
         }}
       />
 

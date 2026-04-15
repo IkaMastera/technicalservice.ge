@@ -113,7 +113,7 @@ export default function AboutSection({ lang = "en" }: { lang?: Lang }) {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(900px 520px at 12% 12%, rgba(255,176,32,0.10), transparent 60%), radial-gradient(900px 520px at 88% 18%, rgba(255,255,255,0.03), transparent 60%)",
+              "radial-gradient(900px 520px at 12% 12%, rgba(70, 130, 180,0.08), transparent 60%), radial-gradient(900px 520px at 88% 18%, rgba(255,255,255,0.03), transparent 60%)",
           }}
         />
         {!reduce && (

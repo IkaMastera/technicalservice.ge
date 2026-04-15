@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "framer-motion";
 
 type Lang = "en" | "ka";
 
@@ -36,241 +36,247 @@ const STATEMENTS = {
   ka: [
     {
       number: "01",
-      headline: "ჩვენ არ ვამონტაჟებთ — ჩვენ ვაპროექტებთ.",
-      body: "ყველა სისტემა, რომელსაც ვაყენებთ, დაპროექტებულია, დოკუმენტირებულია და ჩაბარებულია საინჟინრო დისციპლინით.",
+      headline: "ჩვენ არამხოლოდ ვამონტაჟებთ - ასევე ვაპროექტებთ.",
+      body: "ყველა სისტემა, რომელსაც ვაინსტალირებთ, დაპროექტებულია, დოკუმენტირებულია და ჩაბარებულია საინჟინრო დისციპლინით.",
       accent: false,
     },
     {
       number: "02",
-      headline: "17 წლის რეალური გამოცდილება.",
-      body: "არა თეორიული. ჩვენი გუნდი ნახულია ყველა შეზღუდვა, ყველა სამშენებლო პირობა — და მიუხედავად ამისა, ჩავაბარა.",
+      headline: "17 წლიანი რეალური გამოცდილება.",
+      body: "ჩვენი გამოცდილება გასცდება თეორიას. გადალახული გვაქვს ყველა ტიპის სამშენებლო ბარიერი და თითოეული პროექტი წარმატებით მიგვიყვანია ბოლომდე.",
       accent: true,
     },
     {
       number: "03",
-      headline: "დოკუმენტაცია თქვენ გრჩებათ.",
+      headline: "დოკუმენტაცია თქვენ საკუთრებაშია.",
       body: "ყველა პროექტი მთავრდება სუფთა ნახაზებით, ტესტის ჩანაწერებითა და ჩაბარების ფაილებით.",
       accent: false,
     },
     {
       number: "04",
-      headline: "ხანძარი. ენერგია. ჰაერი. წყალი. ერთი გუნდი.",
-      body: "ყველა MEP სისტემას ვაერთიანებთ ერთ კოორდინირებულ გადაწყვეტაში. ერთი მოცულობა, ერთი ჩაბარება.",
+      headline: "სახანძრო. ელექტრო. HVAC. სანტექნიკა. სრული ინტეგრაცია.",
+      body: "ყველა MEP სისტემას ვაქცევთ ერთ, იდეალურად სინქრონიზებულ მექანიზმად. ერთიანი დაგეგმარება, უნაკლო ჩაბარება.",
       accent: false,
-    },
+    }
   ],
-}
+};
 
-function Statement({
-  item,
-  index,
-}: {
-  item: {
-    number: string;
-    headline: string;
-    body: string;
-    accent: boolean;
-  };
-  index: number;
+// ── SUB-COMPONENT FOR INDIVIDUAL SLIDES ──
+function StatementLayer({ 
+  item, 
+  index, 
+  activeIndexFloat 
+}: { 
+  item: typeof STATEMENTS["en"][0]; 
+  index: number; 
+  activeIndexFloat: MotionValue<number>;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-  const isEven = index % 2 === 0;
+  const progress = useTransform(activeIndexFloat, (v) => v - index);
+  
+  const scale = useTransform(progress, [-1, -0.35, 0.35, 1], [0.6, 1, 1, 1.4]);
+  const y = useTransform(progress, [-1, -0.35, 0.35, 1], ["40%", "0%", "0%", "-40%"]);
+  const blur = useTransform(progress, [-1, -0.35, 0.35, 1], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
+  const opacity = useTransform(progress, [-1, -0.35, -0.2, 0.2, 0.35, 1], [0, 0, 1, 1, 0, 0]);
 
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-      className={`relative flex flex-col lg:flex-row items-start lg:items-center gap-8 py-16 lg:py-20 border-b border-white/5 ${
-        isEven ? "" : "lg:flex-row-reverse"
-      }`}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      style={{ scale, opacity, y, filter: blur, zIndex: 10 - index }}
     >
-      {/* Ghost number — deep background, very subtle */}
-      <div
-        className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden"
-        style={{ zIndex: 0 }}
-        aria-hidden
-      >
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 1.2, delay: 0.2 }}
-          className={`font-black leading-none ${isEven ? "ml-0" : "ml-auto"}`}
+      <div className="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-[10%]">
+        <span 
+          className="font-black leading-none select-none"
           style={{
-            fontSize: "clamp(8rem, 18vw, 20rem)",
-            opacity: 0.04,
-            letterSpacing: "-0.04em",
-            color: "rgba(255,255,255,0.5)",
-            WebkitTextStroke: "1px rgba(255,255,255,0.08)",
-            WebkitTextFillColor: "transparent",
+            fontSize: "clamp(12rem, 35vw, 40rem)",
+            color: "transparent",
+            WebkitTextStroke: "2px color-mix(in srgb, var(--color-text) 15%, transparent)",
+            letterSpacing: "-0.05em",
+            transform: "translateZ(0)",
           }}
         >
-          {item.number}
-        </motion.span>
-      </div>
-
-      {/* Left — number + accent line */}
-      <div className="relative flex-shrink-0 w-24 lg:w-32" style={{ zIndex: 1 }}>
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={inView ? { scaleX: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="h-px bg-accent mb-4"
-          style={{ transformOrigin: "left", width: "100%" }}
-        />
-        <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent/60">
           {item.number}
         </span>
       </div>
 
-      {/* Right — headline + body */}
-      <div className="relative flex-1" style={{ zIndex: 1 }}>
-        <h3
-          className={`font-black leading-[1.05] tracking-tight mb-5 ${
-            item.accent ? "text-accent" : "text-white"
-          }`}
-          style={{ fontSize: "clamp(1.6rem, 3.5vw, 3rem)" }}
+      <div className="absolute left-0 lg:left-[5%] max-w-2xl w-full p-6 lg:p-10 pointer-events-auto">
+        <div 
+          className="rounded-3xl border border-border bg-surface/60 backdrop-blur-2xl shadow-2xl p-8 lg:p-12"
+          style={{
+            boxShadow: "0 25px 50px -12px color-mix(in srgb, var(--color-bg) 50%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-text) 10%, transparent)"
+          }}
         >
-          {item.headline}
-        </h3>
-        <p className="text-[15px] leading-relaxed text-white/40 max-w-xl">
-          {item.body}
-        </p>
+          <div className="flex items-center gap-4 mb-6">
+            <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-accent/10 text-accent font-mono text-xs font-bold border border-accent/20">
+              {item.number}
+            </span>
+            <div className="h-px flex-1 bg-gradient-to-r from-accent/40 to-transparent" />
+          </div>
+          
+          <h3 className={`text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-6 ${item.accent ? "text-accent" : "text-text"}`}>
+            {item.headline}
+          </h3>
+          
+          <p className="text-base lg:text-lg leading-relaxed text-muted font-medium">
+            {item.body}
+          </p>
+        </div>
       </div>
     </motion.div>
   );
 }
 
+// ── MAIN COMPONENT ──
 export default function WhyTSCSection({ lang = "en" }: { lang?: Lang }) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(sectionRef, { once: true, margin: "-80px" });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const statements = STATEMENTS[lang];
+  
+  const totalSteps = statements.length + 1;
 
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
+    target: containerRef,
+    offset: ["start start", "end end"],
   });
 
-  // Subtle parallax on the section title
-  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
+  const activeIndexFloat = useTransform(scrollYProgress, [0, 1], [0, totalSteps - 1]);
 
-  const statements = STATEMENTS[lang];
+  // ── CALL FINAL CTA HOOKS AT TOP LEVEL ──
+  const ctaIndex = statements.length;
+  const ctaProgress = useTransform(activeIndexFloat, (v) => v - ctaIndex);
+  
+  const ctaScale = useTransform(ctaProgress, [-1, -0.3, 0], [0.6, 1, 1]);
+  // Resting at 12vh pushes the container down to create a gap from the fixed header
+  const ctaY = useTransform(ctaProgress, [-1, -0.3, 0], ["40vh", "12vh", "12vh"]);
+  const ctaOpacity = useTransform(ctaProgress, [-1, -0.3, -0.1, 0], [0, 0, 1, 1]);
+  const ctaBlur = useTransform(ctaProgress, [-1, -0.3, 0], ["blur(12px)", "blur(0px)", "blur(0px)"]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-[#080706] overflow-hidden"
-      aria-labelledby="why-tsc-heading"
-    >
-      {/* Top accent rule */}
-      <div
-        className="absolute top-0 inset-x-0 h-px pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(255,122,53,0.35) 40%, rgba(255,122,53,0.35) 60%, transparent 100%)",
-        }}
-      />
+    <section ref={containerRef} className="relative bg-bg" style={{ height: `${totalSteps * 150}vh` }}>
+      
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+        
+        {/* Animated Engineering Grid Background */}
+        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Depth gradients */}
+          <div className="absolute inset-0 bg-[radial-gradient(1200px_760px_at_18%_10%,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_60%),radial-gradient(980px_720px_at_86%_18%,color-mix(in_srgb,var(--color-text)_4%,transparent),transparent_62%)]" />
+          
+          {/* BIG grid */}
+          <div
+            className={`absolute -inset-24 opacity-60 dark:opacity-40 [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(920px_620px_at_50%_26%,black,transparent_88%)] ${reduceMotion ? "" : "animate-[gridPan_12s_linear_infinite]"}`}
+          />
 
-      {/* Ambient warm glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(255,122,53,0.05) 0%, transparent 55%)",
-        }}
-      />
+          {/* MICRO grid */}
+          <div
+            className={`absolute -inset-24 opacity-40 dark:opacity-20 [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:14px_14px] [mask-image:radial-gradient(920px_620px_at_50%_26%,black,transparent_88%)] ${reduceMotion ? "" : "animate-[gridPan_18s_linear_infinite_reverse]"}`}
+          />
 
-      <div className="relative mx-auto max-w-6xl px-6 lg:px-12">
-
-        {/* Section header */}
-        <motion.div
-          style={{ y: titleY }}
-          className="pt-20 lg:pt-28 pb-4"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="h-px w-8 bg-accent" />
-            <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-accent">
-              {lang === "en" ? "Why TSC" : "რატომ TSC"}
-            </span>
-          </motion.div>
-
-          <div className="overflow-hidden">
-            <motion.h2
-              id="why-tsc-heading"
-              initial={{ y: "100%" }}
-              animate={inView ? { y: "0%" } : {}}
-              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              className="font-black tracking-tight text-white leading-[1.0]"
-              style={{ fontSize: "clamp(2.8rem, 7vw, 7rem)" }}
-            >
-              {lang === "en" ? "Built different." : "განსხვავებულად."}
-            </motion.h2>
-          </div>
-
-          <div className="overflow-hidden mt-2">
-            <motion.h2
-              initial={{ y: "100%" }}
-              animate={inView ? { y: "0%" } : {}}
-              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
-              className="font-black tracking-tight text-accent leading-[1.0]"
-              style={{ fontSize: "clamp(2.8rem, 7vw, 7rem)" }}
-            >
-              {lang === "en" ? "Delivered right." : "სწორად ჩაბარებული."}
-            </motion.h2>
-          </div>
-        </motion.div>
-
-        {/* Statements */}
-        <div className="mt-4">
-          {statements.map((item, i) => (
-            <Statement key={item.number} item={item} index={i} />
-          ))}
+          <style>{`
+            @keyframes gridPan {
+              0% { transform: translate3d(0px, 0px, 0); }
+              100% { transform: translate3d(56px, 0px, 0); }
+            }
+          `}</style>
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="py-16 lg:py-20 flex flex-col sm:flex-row items-start sm:items-center gap-6"
-        >
-          <div className="flex-1">
-            <p className="text-lg font-bold text-white mb-1">
-              {lang === "en"
-                ? "Ready to work with an engineering firm that documents everything?"
-                : "მზად ხართ ითანამშრომლოთ?"}
-            </p>
-            <p className="text-sm text-white/30">
-              {lang === "en"
-                ? "Site visit, scope, and proposal — no commitment required."
-                : "ვიზიტი, მოცულობა და შეთავაზება — ვალდებულების გარეშე."}
-            </p>
+        {/* Ambient Glow */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 60%)" }}
+        />
+
+        <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-12 h-full flex flex-col justify-center">
+          
+          {/* Static Header */}
+          <div className="absolute top-12 lg:top-24 left-6 lg:left-12 right-6 lg:right-12 z-40 flex justify-between items-start pointer-events-none">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-1 w-8 rounded-full bg-accent" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
+                  {lang === "en" ? "Why TSC" : "რატომ TSC"}
+                </span>
+              </div>
+              <h2 className="font-black tracking-tight text-text leading-[1.05] drop-shadow-lg" style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}>
+                {lang === "en" ? "Built different." : "ზუსტი მიდგომა."}
+                <br />
+                <span className="text-accent">{lang === "en" ? "Delivered right." : "უნაკლო ჩაბარება."}</span>
+              </h2>
+            </div>
           </div>
-          <Link
-            href={`/${lang}/contact`}
-            className="group inline-flex items-center gap-3 rounded-xl bg-accent px-6 py-3.5 text-sm font-bold text-white transition hover:bg-accent2 active:scale-[0.98] shadow-[0_4px_24px_rgba(255,122,53,0.30)] flex-shrink-0"
-          >
-            {lang === "en" ? "Start a conversation" : "დაგვიკავშირდით"}
-            <span className="transition-transform group-hover:translate-x-0.5">→</span>
-          </Link>
-        </motion.div>
 
+          {/* ── KINETIC 3D LAYERS ── */}
+          <div className="relative w-full h-[60vh] flex items-center justify-center mt-12">
+            
+            {statements.map((item, i) => (
+              <StatementLayer 
+                key={item.number} 
+                item={item} 
+                index={i} 
+                activeIndexFloat={activeIndexFloat} 
+              />
+            ))}
+
+            {/* ── SLIDE 5: THE COMPACT FINAL CTA ── */}
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              style={{ scale: ctaScale, opacity: ctaOpacity, y: ctaY, filter: ctaBlur, zIndex: 20 }}
+            >
+              {/* Subtle backdrop */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-20">
+                 <div className="w-[60vw] h-[60vw] max-w-[500px] max-h-[500px] bg-accent blur-[100px] rounded-full mix-blend-screen" />
+              </div>
+
+              <div className="relative w-full max-w-2xl px-6 pointer-events-auto">
+                <div 
+                  className="relative overflow-hidden rounded-3xl border border-border bg-surface/80 backdrop-blur-3xl p-8 lg:p-12 text-center shadow-2xl"
+                >
+                  {/* Internal micro-grid for the CTA box */}
+                  <div 
+                    className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
+                    style={{
+                      backgroundImage: `linear-gradient(to right, var(--color-text) 1px, transparent 1px), linear-gradient(to bottom, var(--color-text) 1px, transparent 1px)`,
+                      backgroundSize: '24px 24px',
+                      maskImage: 'radial-gradient(ellipse at center, black 20%, transparent 80%)',
+                      WebkitMaskImage: 'radial-gradient(ellipse at center, black 20%, transparent 80%)'
+                    }}
+                  />
+                  
+                  {/* Subtle top/bottom structural lines */}
+                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+                  <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+                  
+                  <h3 className="relative z-10 text-3xl lg:text-5xl font-black tracking-tight text-text mb-4">
+                    {lang === "en" ? "Ready for engineered" : "საინჟინრო სიზუსტე თქვენი"}{" "}
+                    <span className="text-accent">{lang === "en" ? "precision?" : "პროექტისთვის"}</span>
+                  </h3>
+                  
+                  <p className="relative z-10 text-base text-muted font-medium mb-8 max-w-lg mx-auto">
+                    {lang === "en" 
+                      ? "Stop guessing. Start engineering. Schedule a site visit, define the scope, and receive a complete proposal—no commitment required." 
+                      : "ნუ დახარჯავთ რესურსებს ვარაუდებზე. დაგეგმეთ ვიზიტი ობიექტზე და მიიღეთ ზუსტი საინჟინრო გადაწყვეტა უფასო კონსულტაციის ფარგლებში."}
+                  </p>
+
+                  <div className="flex justify-center relative z-10">
+                    <Link
+                      href={`/${lang}/contact`}
+                      className="group relative inline-flex items-center justify-center gap-3 rounded-xl bg-gradient-to-b from-accent to-accent2 border border-accent/40 px-6 py-3 text-sm font-bold text-white transition-all hover:scale-[1.02] active:scale-95 shadow-[0_4px_20px_color-mix(in_srgb,var(--color-accent)_30%,transparent)] overflow-hidden"
+                    >
+                      {/* Metallic sheen overlay */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
+                      
+                      {/* Sweep animation */}
+                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-[tsc-btn-sweep_2s_infinite_ease-in-out]" />
+                      
+                      <span className="relative z-10">{lang === "en" ? "Start a Conversation" : "დაგვიკავშირდით"}</span>
+                      <span className="relative z-10 transition-transform group-hover:translate-x-1">→</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
       </div>
-
-      {/* Bottom border */}
-      <div
-        className="absolute bottom-0 inset-x-0 h-px pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.05) 50%, transparent)",
-        }}
-      />
     </section>
   );
 }
