@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SERVICES } from "@/data/services";
 import ServiceDetailTemplate from "@/components/seperate-pages/services/services-detail/service-detail-template";
-import { getServiceImagePaths, SERVICE_MEDIA } from "@/data/service-media";
+import { getServiceImagePaths } from "@/data/service-media";
+
+const LANG = "ka" as const;
 
 type Props = {
   params: Promise<{ slug: string }> | { slug: string };
@@ -14,23 +16,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!s) {
     return {
-      title: "Service not found | TSC",
+      title: "სერვისი ვერ მოიძებნა | TSC",
       robots: { index: false, follow: false },
     };
   }
 
+  const title = s.title[LANG] ?? s.title.en ?? s.slug;
+  const rawDesc = s.description[LANG] ?? s.description.en ?? "";
+  const desc = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "…" : rawDesc;
+
   return {
-    title: `${s.title} in Georgia | TSC Engineering Services`,
-    description: `Professional ${s.title.toLowerCase()} services in Georgia. Design, installation, and maintenance for commercial and residential buildings, delivered with reliable engineering standards.`,
-
+    title: `${title} | TSC საინჟინრო სერვისები`,
+    description: desc,
     alternates: {
-      canonical: `https://technicalservice.ge/en/services/${s.slug}`,
+      canonical: `https://technicalservice.ge/${LANG}/services/${s.slug}`,
+      languages: {
+        en: `https://technicalservice.ge/en/services/${s.slug}`,
+        ka: `https://technicalservice.ge/ka/services/${s.slug}`,
+      },
     },
-
-    robots: {
-      index: true,
-      follow: true,
-    },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -44,8 +49,8 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <ServiceDetailTemplate
-      title={s.title}
       slug={p.slug}
+      lang={LANG}
       images={images}
     />
   );
