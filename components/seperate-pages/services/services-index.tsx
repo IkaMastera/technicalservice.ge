@@ -5,66 +5,124 @@ import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { SERVICES } from "@/data/services";
 
+type Lang = "en" | "ka";
+
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-const CATEGORY_BY_SLUG: Record<string, string> = {
-  "building-exterior-interior": "Construction",
-  "fire-alarm-sound": "Fire Systems",
-  "generator-transformer": "Power",
-  "electrical-systems": "Electrical",
-  "air-conditioning": "HVAC",
-  "plumbing-mechanical": "Plumbing",
-  "boiler-heating": "Heating",
-  "water-treatment": "Water",
-  "kitchen-laundry": "Appliances",
-  "telecommunication-tv": "Low Voltage",
-  "cctv-monitoring": "CCTV",
-  "parking-automation": "Automation",
+/* ─────────────────────────────────────────────────────────
+   UI strings — local. Move to copy.ts later if you want.
+   ───────────────────────────────────────────────────────── */
+const UI = {
+  en: {
+    kicker:        "Engineering Services · Integration · Maintenance",
+    title:         "Services",
+    desc:          "Choose a service to view scope.",
+    filterLabel:   "Filter",
+    verifiedTag:   "Verified process",
+    searchPh:      "Search services (HVAC, fire, CCTV...)",
+    catAll:        "All",
+    viewDetails:   "View details",
+    empty:         "No services found. Try another keyword or category.",
+  },
+  ka: {
+    kicker:        "საინჟინრო სერვისები · ინტეგრაცია · მომსახურება",
+    title:         "სერვისები",
+    desc:          "აირჩიეთ სერვისი მისი მოცულობის სანახავად.",
+    filterLabel:   "ფილტრი",
+    verifiedTag:   "დადასტურებული პროცესი",
+    searchPh:      "სერვისის ძიება (HVAC, სახანძრო, CCTV...)",
+    catAll:        "ყველა",
+    viewDetails:   "დეტალების ნახვა",
+    empty:         "სერვისი ვერ მოიძებნა. სცადეთ სხვა საკვანძო სიტყვა ან კატეგორია.",
+  },
 };
 
-export default function ServicesIndex() {
+type Props = { lang?: Lang };
+
+/** Special sentinel for the "All" filter — stored as a stable string,
+ *  translated at render time. Using this instead of the localized
+ *  string means switching language doesn't strand the state. */
+const ALL_KEY = "__ALL__";
+
+export default function ServicesIndex({ lang = "en" }: Props) {
   const reduce = useReducedMotion();
+  const ui = UI[lang];
 
   const [q, setQ] = useState("");
-  const [activeCat, setActiveCat] = useState<string>("All");
+  /** activeCat stores the ENGLISH category name (or ALL_KEY for "all").
+   *  This is language-agnostic so it survives lang switches. */
+  const [activeCat, setActiveCat] = useState<string>(ALL_KEY);
 
+  /* ── Build category list — pairs English key (stable) with localized
+        label (display only). ── */
   const cats = useMemo(() => {
-    const set = new Set<string>();
-    SERVICES.forEach((s) => set.add(CATEGORY_BY_SLUG[s.slug] ?? "General"));
-    return ["All", ...Array.from(set).sort()];
-  }, []);
+    const seen = new Set<string>();
+    const list: { key: string; label: string }[] = [
+      { key: ALL_KEY, label: ui.catAll },
+    ];
+    SERVICES.forEach((s) => {
+      const enKey = s.category.en;
+      if (seen.has(enKey)) return;
+      seen.add(enKey);
+      list.push({ key: enKey, label: s.category[lang] });
+    });
+    // Sort everything after "All" by localized label
+    const all = list[0];
+    const rest = list.slice(1).sort((a, b) => a.label.localeCompare(b.label));
+    return [all, ...rest];
+  }, [lang, ui.catAll]);
 
+  /* ── Filter logic ──
+     - Category match: ALL_KEY or English-key match
+     - Query match: title (both langs) + slug + category (both langs) + description */
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
     return SERVICES.filter((s) => {
-      const cat = CATEGORY_BY_SLUG[s.slug] ?? "General";
-      const matchesCat = activeCat === "All" || cat === activeCat;
-      const matchesQ =
-        !query ||
-        s.title.toLowerCase().includes(query) ||
-        s.slug.toLowerCase().includes(query) ||
-        cat.toLowerCase().includes(query);
-      return matchesCat && matchesQ;
+      const matchesCat = activeCat === ALL_KEY || s.category.en === activeCat;
+
+      if (!matchesCat) return false;
+      if (!query) return true;
+
+      const haystack = [
+        s.title[lang],
+        s.title.en,
+        s.slug,
+        s.category[lang],
+        s.category.en,
+        s.description[lang],
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(query);
     });
-  }, [q, activeCat]);
+  }, [q, activeCat, lang]);
 
   const wrap: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: reduce ? 0 : 0.06, delayChildren: reduce ? 0 : 0.02 },
+      transition: {
+        staggerChildren: reduce ? 0 : 0.06,
+        delayChildren: reduce ? 0 : 0.02,
+      },
     },
   };
 
   const item: Variants = {
     hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: reduce ? 0 : 0.35, ease: "easeOut" } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: reduce ? 0 : 0.35, ease: "easeOut" },
+    },
   };
 
   return (
     <main className="relative bg-bg">
+      {/* Background grid */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
@@ -75,49 +133,52 @@ export default function ServicesIndex() {
         }}
       />
 
+      {/* Ambient gradients */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(1000px 520px at 15% 10%, rgba(70, 130, 180,0.08), transparent 60%), radial-gradient(900px 480px at 85% 20%, rgba(255,255,255,0.03), transparent 62%)",
+            "radial-gradient(1000px 520px at 15% 10%, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 60%), radial-gradient(900px 480px at 85% 20%, rgba(255,255,255,0.03), transparent 62%)",
         }}
       />
 
       <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-16 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
-        {/* Header */}
+
+        {/* ════════════════════════════════════════════════
+            HEADER
+            ════════════════════════════════════════════════ */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <p className="text-xs uppercase tracking-[0.22em] text-muted">
-              Engineering Services • Integration • Maintenance
+              {ui.kicker}
             </p>
             <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-text">
-              Services
+              {ui.title}
             </h1>
             <div className="mt-4 h-px w-44 bg-accent/70" />
-            <p className="mt-5 text-[15px] leading-7 text-muted">
-              Choose a service to view scope, deliverables, and standards. Built for real-world execution —
-              documentation discipline, clean handover, inspection-ready.
-            </p>
+            <p className="mt-5 text-[15px] leading-7 text-muted">{ui.desc}</p>
           </div>
 
-          {/* Search */}
+          {/* Search + filter card */}
           <div className="w-full max-w-xl">
             <div className="rounded-xl border border-border bg-surface px-4 py-4">
               <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-[0.18em] text-muted">Filter</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-muted">
+                  {ui.filterLabel}
+                </p>
                 <span className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface2 px-3 py-1 text-[12px] text-text">
                   <span className="h-2 w-2 rounded-full bg-accent" />
-                  Verified process
+                  {ui.verifiedTag}
                 </span>
               </div>
 
               <label className="mt-3 block">
-                <span className="sr-only">Search services</span>
+                <span className="sr-only">{ui.searchPh}</span>
                 <input
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search services (HVAC, fire, CCTV...)"
+                  placeholder={ui.searchPh}
                   className={cx(
                     "mt-2 w-full rounded-lg border border-border bg-bg px-3 py-2",
                     "text-[14px] text-text placeholder:text-muted",
@@ -128,12 +189,12 @@ export default function ServicesIndex() {
 
               <div className="mt-3 flex flex-wrap gap-2">
                 {cats.map((c) => {
-                  const active = c === activeCat;
+                  const active = c.key === activeCat;
                   return (
                     <button
-                      key={c}
+                      key={c.key}
                       type="button"
-                      onClick={() => setActiveCat(c)}
+                      onClick={() => setActiveCat(c.key)}
                       className={cx(
                         "rounded-lg border px-3 py-1 text-[12px] transition",
                         active
@@ -141,7 +202,7 @@ export default function ServicesIndex() {
                           : "border-border bg-surface2 text-muted hover:border-white/20 hover:text-text"
                       )}
                     >
-                      {c}
+                      {c.label}
                     </button>
                   );
                 })}
@@ -150,9 +211,11 @@ export default function ServicesIndex() {
           </div>
         </div>
 
-        {/* Grid */}
+        {/* ════════════════════════════════════════════════
+            GRID
+            ════════════════════════════════════════════════ */}
         <motion.div
-          key={`${activeCat}:${q}`}
+          key={`${activeCat}:${q}:${lang}`}
           variants={wrap}
           initial="hidden"
           animate="show"
@@ -160,13 +223,13 @@ export default function ServicesIndex() {
           className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           {filtered.map((s) => {
-            const cat = CATEGORY_BY_SLUG[s.slug] ?? "General";
+            const cat = s.category[lang];
             const Icon = s.Icon;
 
             return (
               <motion.div key={s.slug} variants={item} layout>
                 <Link
-                  href={`/en/services/${s.slug}`}
+                  href={`/${lang}/services/${s.slug}`}
                   className={cx(
                     "group block h-full rounded-xl border border-border bg-surface",
                     "transition-transform duration-200 hover:-translate-y-0.5 hover:border-white/20"
@@ -200,13 +263,13 @@ export default function ServicesIndex() {
                     </div>
 
                     <h3 className="mt-5 text-base font-bold text-text leading-6 min-h-12">
-                      {s.title}
+                      {s.title[lang]}
                     </h3>
 
                     <div className="mt-4 h-px w-full bg-white/10" />
 
                     <div className="mt-4 flex items-center justify-between">
-                      <p className="text-[12px] text-muted">View details</p>
+                      <p className="text-[12px] text-muted">{ui.viewDetails}</p>
 
                       <div className="flex items-center gap-2">
                         <span className="h-1 w-8 bg-accent/60 transition-all duration-200 group-hover:w-10" />
@@ -222,7 +285,7 @@ export default function ServicesIndex() {
 
         {filtered.length === 0 && (
           <div className="mt-10 rounded-xl border border-border bg-surface p-6 text-muted">
-            No services found. Try another keyword or category.
+            {ui.empty}
           </div>
         )}
       </div>

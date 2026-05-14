@@ -187,13 +187,6 @@ export default function AboutUsSection({ lang = "en" }: { lang?: Lang }) {
                     </motion.div>
                   ))}
                 </div>
-
-                <motion.div variants={line} className="mt-5 h-px w-full origin-left bg-white/10" />
-
-                <div className="mt-4 flex items-center justify-between text-[12px] text-muted">
-                  <span>{t.footerLeft}</span>
-                  <span className="text-[#2F6BFF]">{t.footerRight}</span>
-                </div>
               </motion.div>
             </div>
           </div>

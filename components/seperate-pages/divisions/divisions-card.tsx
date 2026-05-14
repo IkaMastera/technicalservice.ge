@@ -48,11 +48,19 @@ function StatusPill({
   return (
     <span
       className={cx(
-        "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] tracking-wide",
-        live ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-200" : "border-white/12 bg-white/5 text-muted"
+        "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] tracking-wide flex-shrink-0",
+        live
+          ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-200"
+          : "border-white/12 bg-white/5 text-muted"
       )}
     >
-      <span className={cx("h-2 w-2 rounded-full", live ? "bg-emerald-300" : "bg-accent/80")} aria-hidden="true" />
+      <span
+        className={cx(
+          "h-2 w-2 rounded-full",
+          live ? "bg-emerald-300" : "bg-accent/80"
+        )}
+        aria-hidden="true"
+      />
       {live ? liveLabel : underLabel}
     </span>
   );
@@ -63,10 +71,11 @@ export default function DivisionCard({
   eyebrow,
   title,
   status,
+  // tags is accepted but not displayed in this layout — kept for API parity
+  tags: _tags,
+  description,
   liveLabel,
   underLabel,
-  tags,
-  description,
   ownershipLabel,
   ownershipValue,
   ctaLabel,
@@ -76,7 +85,6 @@ export default function DivisionCard({
   className,
 }: Props) {
   const reduce = useReducedMotion();
-
   const hoverMotion: TargetAndTransition | undefined = reduce ? undefined : { y: -3 };
 
   return (
@@ -90,7 +98,7 @@ export default function DivisionCard({
       )}
     >
       {/* Accent rail */}
-      <div aria-hidden="true" className="absolute left-0 top-0 h-full w-[3px] bg-accent/80" />
+      <div aria-hidden="true" className="absolute left-0 top-0 z-10 h-full w-[3px] bg-accent/80" />
 
       {/* Image layer */}
       <div className="absolute inset-0">
@@ -102,11 +110,19 @@ export default function DivisionCard({
           sizes="(min-width: 1024px) 50vw, 100vw"
           className={cx(
             "object-cover",
-            "opacity-[0.88] grayscale",
+            "opacity-[0.55] grayscale",
             "transition duration-500 ease-out",
-            "group-hover:opacity-100 group-hover:grayscale-0"
+            "group-hover:opacity-[0.75] group-hover:grayscale-0"
           )}
         />
+
+        {/* Bottom-to-top dark gradient — guarantees text legibility on every image */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/55"
+        />
+
+        {/* Radar pulse on hover */}
         <div
           aria-hidden="true"
           className={cx(
@@ -130,67 +146,80 @@ export default function DivisionCard({
         />
       </div>
 
-      <div className="relative grid min-h-[460px] grid-rows-[auto_auto_1fr_auto] p-7">
+      {/* ─────────────────────────────────────────────────
+          CONTENT — flex column. Top block at top, bottom
+          block pinned to bottom via mt-auto on the bottom
+          block. Description sits in between, taking
+          flex-1 so the dead zone disappears.
+          ───────────────────────────────────────────────── */}
+      <div className="relative flex min-h-[460px] flex-col p-7">
+
+        {/* ── TOP: icon + title + status pill ── */}
         <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-black/35">
+          <div className="flex min-w-0 items-start gap-3">
+            <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl border border-white/10 bg-black/45 backdrop-blur-sm">
               {icon}
             </div>
 
             <div className="min-w-0">
-              <p className="text-[12px] uppercase tracking-[0.22em] text-muted">{eyebrow}</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-text">{title}</h2>
+              <p className="text-[12px] uppercase tracking-[0.22em] text-muted">
+                {eyebrow}
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-text">
+                {title}
+              </h2>
             </div>
           </div>
 
           <StatusPill status={status} liveLabel={liveLabel} underLabel={underLabel} />
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          {tags.slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-[12px] text-muted"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div className="min-h-0" />
-
-        <div className="pt-6">
+        {/* ── MIDDLE: description, takes available space ── */}
+        <div className="mt-6 flex-1">
           <p
             className={cx(
-              "max-w-[52ch] text-sm leading-relaxed text-text/90",
-              "transition duration-300 ease-out",
-              reduce ? "" : "opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
+              "max-w-[52ch] text-sm leading-relaxed",
+              // Always visible, brightens on hover
+              reduce
+                ? "text-text/85"
+                : "text-text/70 transition-colors duration-300 group-hover:text-text/95"
             )}
           >
             {description}
           </p>
+        </div>
 
-          <div className="mt-6 flex items-end justify-between gap-4">
-            <div className="text-[12px] text-muted">
-              {ownershipLabel} <span className="text-text">{ownershipValue}</span>
-            </div>
-
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cx(
-                "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold",
-                "transition active:scale-[0.98]",
-                status === "LIVE"
-                  ? "bg-accent text-black hover:translate-y-[-1px] hover:shadow-[0_10px_26px_rgba(0,0,0,0.26)]"
-                  : "border border-white/15 bg-white/5 text-text hover:bg-white/8"
-              )}
-            >
-              {ctaLabel}
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-            </a>
+        {/* ── BOTTOM: ownership + CTA, baseline-aligned ──
+            mt-auto pushes this to the card's bottom edge.
+            border-t separates it visually from the description
+            and gives the same horizontal line on every card. */}
+        <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-5">
+          {/* Ownership */}
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted/70 flex-shrink-0">
+              {ownershipLabel}
+            </span>
+            <span className="text-sm font-semibold text-text">
+              {ownershipValue}
+            </span>
           </div>
+
+          {/* CTA */}
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cx(
+              "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold",
+              "transition-all duration-200 active:scale-[0.98] flex-shrink-0",
+              status === "LIVE"
+                ? "bg-accent text-black hover:bg-accent2 hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--color-accent)_35%,transparent)]"
+                : "border border-white/15 bg-white/5 text-text hover:border-white/30 hover:bg-white/10"
+            )}
+          >
+            {ctaLabel}
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
       </div>
 

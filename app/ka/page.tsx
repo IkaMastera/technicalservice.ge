@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import HeroSlider from "@/components/main-page-sections/hero-slider";
-import HeroVideo from "@/components/main-page-sections/main-hero";
+import HeroVideo from "@/components/main-page-sections/services-section";
 import WhyTSCSection from "@/components/main-page-sections/why-tsc-section";
 import AboutUsSection from "@/components/main-page-sections/about-us";
 import ContactUsSection from "@/components/main-page-sections/contact-us";

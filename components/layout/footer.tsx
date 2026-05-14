@@ -131,7 +131,6 @@ export default function Footer() {
 
               <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
                 <span className="text-xs tracking-wide text-muted">EST. 2020</span>
-                <span className="text-xs text-muted">Inspection-ready documentation</span>
               </div>
             </div>
           </motion.div>
@@ -178,12 +177,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-
-            <div className="mt-6 rounded-xl border border-border bg-surface p-4">
-              <p className="text-xs text-muted">
-                Response time depends on ongoing site work. For urgent issues, call directly.
-              </p>
-            </div>
           </motion.div>
         </div>
       </div>

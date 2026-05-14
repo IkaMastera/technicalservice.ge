@@ -9,7 +9,6 @@ export const CONTACT = {
   emailSecondary: "t.kakhidze@technicalservice.ge",
   phones: ["+995 511 22 33 66", "+995 511 22 33 55"],
   website: "technicalservice.ge",
-  note: "Response time depends on ongoing site work. For urgent issues, call directly.",
 };
 
 // Helpers (clean links)

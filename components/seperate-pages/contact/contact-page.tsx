@@ -278,10 +278,6 @@ export default function ContactPage({ lang = "en" }: { lang?: Lang }) {
           </motion.h1>
 
           <motion.div variants={fadeUp} className="mt-4 h-px w-44 bg-accent/70" />
-
-          <motion.p variants={fadeUp} className="mt-5 max-w-2xl text-[15px] leading-7 text-muted">
-            {t.desc}
-          </motion.p>
         </motion.div>
 
         <section className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface">
@@ -340,12 +336,6 @@ export default function ContactPage({ lang = "en" }: { lang?: Lang }) {
                     />
                   ))}
                 </motion.div>
-
-                {CONTACT.note && (
-                  <div className="mt-4 rounded-xl border border-border bg-bg p-4 text-[13px] leading-6 text-muted">
-                    {CONTACT.note}
-                  </div>
-                )}
               </div>
             </div>
 

@@ -4,7 +4,7 @@ export type ServiceMedia = {
 };
 
 export const SERVICE_MEDIA: Record<string, ServiceMedia> = {
-  "building-exterior-interior": { slug: "building-exterior-interior", count: 2 },
+  "building-management-system": { slug: "building-management-system", count: 2 },
   "fire-alarm-sound": { slug: "fire-alarm-sound", count: 15 },
   "generator-transformer": { slug: "generator-transformer", count: 2 },
   "electrical-systems": { slug: "electrical-systems", count: 7 },

@@ -50,7 +50,6 @@ export const en = {
           "Design and integration of smart automation systems: lighting, climate, audio, security, and centralized control — installed and maintained with engineering discipline.",
         status: "LIVE",
         externalUrl: "https://control4.com.ge",
-        tags: ["Automation", "Low-voltage", "Integration", "Residential & commercial"],
       },
       {
         name: "Fiix.ge",
@@ -68,7 +67,6 @@ export const en = {
     page: {
       kicker: "Contact",
       title: "Let’s talk about your project",
-      desc: "Share location, scope, and urgency. For urgent issues, call directly.",
 
       centerTitle: "Contact Center",
 
@@ -130,10 +128,10 @@ export const en = {
         capabilities: {
         safetyTitle: "Safety-first engineering",
         safetyDesc: "Decisions built to pass inspection, not just look good.",
-        docsTitle: "Documented delivery",
-        docsDesc: "Clear scope, drawings, checklists, and handover.",
-        integrationTitle: "Integration & service",
-        integrationDesc: "Systems that work together — maintained long-term.",
+        docsTitle: "Complete technical documentation",
+        docsDesc: "verified MEP delivery, warranty coverage and long-term maintenance support.",
+        integrationTitle: "Centralized MEP and smart building (BMS&RMS)",
+        integrationDesc: "integration with long-term technical support.",
         qualifiedTitle: "Qualified execution",
         qualifiedDesc: "Authorized services with disciplined standards.",
         },
@@ -148,9 +146,6 @@ export const en = {
         approachValue: "Inspection-ready",
         approachNote: "Scope clarity, documentation discipline, and clean handover.",
         },
-        footerLinePrefix: "Minimalism isn’t “less effort.” It’s",
-        footerLineStrongA: "fewer claims",
-        footerLineStrongB: "more proof",
     },
     },
   home: {
@@ -194,20 +189,17 @@ export const en = {
       principles: [
         {
           title: "Safety-first execution",
-          desc: "Designs and installs aligned to standards, documentation and accountability.",
+          desc: "Engineering built around safety standards first.",
         },
         {
           title: "Integration discipline",
-          desc: "Systems work together: fire, electrical, HVAC, CCTV, automation — no chaos wiring.",
+          desc: "Unified systems. Clean coordination. One backbone.",
         },
         {
           title: "Inspection-ready handover",
           desc: "Clear scope, clean deliverables, and maintenance mindset from day one.",
         },
       ],
-
-      footerLeft: "Documentation discipline",
-      footerRight: "Integration-ready",
     },
 
     services: {

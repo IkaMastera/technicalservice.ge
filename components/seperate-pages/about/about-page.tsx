@@ -170,16 +170,6 @@ export default function AboutSection({ lang = "en" }: { lang?: Lang }) {
                   />
                 ))}
               </div>
-
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
-                className="mt-5 rounded-xl border border-border bg-surface p-4"
-              >
-                <p className="text-sm text-muted">
-                  {t.footerLinePrefix} <span className="text-text">{t.footerLineStrongA}</span>,{" "}
-                  <span className="text-text">{t.footerLineStrongB}</span>.
-                </p>
-              </motion.div>
             </div>
           </motion.div>
         </motion.div>

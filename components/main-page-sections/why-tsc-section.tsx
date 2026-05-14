@@ -1,282 +1,393 @@
 "use client";
 
-import { useRef } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 
 type Lang = "en" | "ka";
 
-const STATEMENTS = {
+/* ─────────────────────────────────────────────────────────
+   CONTENT — engineering ledger pillars
+   Tight, declarative, position-taking. No marketing fluff.
+   ───────────────────────────────────────────────────────── */
+const PILLARS = {
   en: [
     {
       number: "01",
-      headline: "We don't just install. We engineer.",
-      body: "Every system we touch is designed, documented, and delivered with engineering discipline. Not guesswork. Not chaos wiring. A coordinated solution that passes inspection every time.",
-      accent: false,
+      headline: "Design through service. One scope.",
+      body: "We design, install, and maintain MEP systems as one continuous scope. The team that drew the system is the team that commissions it and services it for the next ten years.",
     },
     {
       number: "02",
-      headline: "17 years of real field experience.",
-      body: "Not theoretical. Not outsourced. Our team has seen every constraint, every site condition, every deadline pressure — and delivered anyway.",
-      accent: true,
+      headline: "Documentation is part of delivery.",
+      body: "Drawings, test records, and commissioning files leave with the building owner. A system without documentation is a liability, not an asset.",
     },
     {
       number: "03",
-      headline: "You keep the documentation.",
-      body: "Every project ends with clean drawings, test records, and handover files. Because a system you can't document is a system you can't trust.",
-      accent: false,
+      headline: "Integration over coordination.",
+      body: "Fire, mechanical, electrical, and BMS designed to function as one system — not four contractors meeting on-site. Single point of accountability.",
     },
     {
       number: "04",
-      headline: "Fire. Power. Air. Water. One team.",
-      body: "We integrate all MEP systems as one coordinated solution. No finger-pointing between contractors. No gaps between systems. One scope, one handover.",
-      accent: false,
+      headline: "17 years on real projects.",
+      body: "Hotels, towers, malls, schools, heritage sites. Constraint-heavy buildings where guessing isn't an option. Field experience over theory.",
     },
   ],
   ka: [
     {
       number: "01",
-      headline: "ჩვენ არამხოლოდ ვამონტაჟებთ - ასევე ვაპროექტებთ.",
-      body: "ყველა სისტემა, რომელსაც ვაინსტალირებთ, დაპროექტებულია, დოკუმენტირებულია და ჩაბარებულია საინჟინრო დისციპლინით.",
-      accent: false,
+      headline: "დიზაინიდან მომსახურებამდე. ერთი მთლიანი სამუშაო.",
+      body: "MEP სისტემებს ვაპროექტებთ, ვამონტაჟებთ და ვემსახურებით ერთიანი მთლიანი სამუშაოს ფარგლებში. გუნდი, რომელმაც სისტემა დააპროექტა, არის იგივე გუნდი, რომელიც მის ჩაბარებას და მომდევნო ათი წლის მომსახურებას უზრუნველყოფს.",
     },
     {
       number: "02",
-      headline: "17 წლიანი რეალური გამოცდილება.",
-      body: "ჩვენი გამოცდილება გასცდება თეორიას. გადალახული გვაქვს ყველა ტიპის სამშენებლო ბარიერი და თითოეული პროექტი წარმატებით მიგვიყვანია ბოლომდე.",
-      accent: true,
+      headline: "დოკუმენტაცია ჩაბარების ნაწილია.",
+      body: "ნახაზები, ტესტირების ჩანაწერები და ჩაბარების ფაილები რჩება შენობის მფლობელთან. დოკუმენტაცის გარეშე სისტემა აქტივი კი არა, ვალდებულებაა.",
     },
     {
       number: "03",
-      headline: "დოკუმენტაცია თქვენ საკუთრებაშია.",
-      body: "ყველა პროექტი მთავრდება სუფთა ნახაზებით, ტესტის ჩანაწერებითა და ჩაბარების ფაილებით.",
-      accent: false,
+      headline: "ინტეგრაცია კოორდინაციის ნაცვლად.",
+      body: "სახანძრო, მექანიკური, ელექტრო და BMS დაპროექტებულია ერთიან სისტემად — და არა ოთხი ცალკეული კონტრაქტორის შეხვედრად ობიექტზე. ერთიანი პასუხისმგებლობა.",
     },
     {
       number: "04",
-      headline: "სახანძრო. ელექტრო. HVAC. სანტექნიკა. სრული ინტეგრაცია.",
-      body: "ყველა MEP სისტემას ვაქცევთ ერთ, იდეალურად სინქრონიზებულ მექანიზმად. ერთიანი დაგეგმარება, უნაკლო ჩაბარება.",
-      accent: false,
-    }
+      headline: "17 წელი რეალურ პროექტებზე.",
+      body: "სასტუმროები, ტაუერები, სავაჭრო ცენტრები, სკოლები, ისტორიული ობიექტები. შეზღუდვებით სავსე შენობები, სადაც ვარაუდი დასაშვები არ არის. პრაქტიკული გამოცდილება თეორიის ნაცვლად.",
+    },
   ],
 };
 
-// ── SUB-COMPONENT FOR INDIVIDUAL SLIDES ──
-function StatementLayer({ 
-  item, 
-  index, 
-  activeIndexFloat 
-}: { 
-  item: typeof STATEMENTS["en"][0]; 
-  index: number; 
-  activeIndexFloat: MotionValue<number>;
-}) {
-  const progress = useTransform(activeIndexFloat, (v) => v - index);
-  
-  const scale = useTransform(progress, [-1, -0.35, 0.35, 1], [0.6, 1, 1, 1.4]);
-  const y = useTransform(progress, [-1, -0.35, 0.35, 1], ["40%", "0%", "0%", "-40%"]);
-  const blur = useTransform(progress, [-1, -0.35, 0.35, 1], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
-  const opacity = useTransform(progress, [-1, -0.35, -0.2, 0.2, 0.35, 1], [0, 0, 1, 1, 0, 0]);
+const UI = {
+  en: {
+    kicker: "Why TSC",
+    title1: "Built different.",
+    title2: "Delivered right.",
+    ctaTitle: "Ready for engineered precision?",
+    ctaBody:
+      "Schedule a site visit. We define scope, document the delivery, and stay accountable for the lifetime of the system.",
+    ctaButton: "Start a Conversation",
+    specStamp: "ENGINEERING STANDARD · TSC",
+  },
+  ka: {
+    kicker: "რატომ TSC",
+    title1: "ზუსტი მიდგომა.",
+    title2: "უნაკლო ჩაბარება.",
+    ctaTitle: "მზად ხართ საინჟინრო სიზუსტისთვის?",
+    ctaBody:
+      "დაგეგმეთ ვიზიტი ობიექტზე. განვსაზღვრავთ სამუშაოს მოცულობას, დავადოკუმენტირებთ ჩაბარებას და პასუხისმგებლები ვართ სისტემის სიცოცხლის ციკლზე.",
+    ctaButton: "დაგვიკავშირდით",
+    specStamp: "საინჟინრო სტანდარტი · TSC",
+  },
+};
+
+/* ─────────────────────────────────────────────────────────
+   Animations — typed as Variants so cubic-beziers don't fight TS
+   ───────────────────────────────────────────────────────── */
+const rowVariants: Variants = {
+  initial: { opacity: 0, y: 16 },
+  enter: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.15 + i * 0.08,
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+const headerVariants: Variants = {
+  initial: { opacity: 0, x: -20 },
+  enter: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const expandVariants: Variants = {
+  collapsed: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: { duration: 0.3, ease: [0.7, 0, 0.84, 0] },
+      opacity: { duration: 0.15 },
+    },
+  },
+  expanded: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+      opacity: { duration: 0.3, delay: 0.1 },
+    },
+  },
+};
+
+/* ─────────────────────────────────────────────────────────
+   MAIN
+   ───────────────────────────────────────────────────────── */
+export default function WhyTSCSection({ lang = "en" }: { lang?: Lang }) {
+  const reduce = useReducedMotion();
+  const pillars = useMemo(() => PILLARS[lang], [lang]);
+  const ui = UI[lang];
+
+  // Accordion state — first row pre-opened so the interaction is visible
+  // on first load. User can collapse it by clicking again.
+  const [openIndex, setOpenIndex] = useState<number>(0);
+
+  const toggle = (i: number) => {
+    setOpenIndex((prev) => (prev === i ? -1 : i));
+  };
 
   return (
-    <motion.div
-      className="absolute inset-0 flex items-center justify-center pointer-events-none"
-      style={{ scale, opacity, y, filter: blur, zIndex: 10 - index }}
+    <section
+      className="relative w-full overflow-hidden bg-bg py-20 lg:py-28"
+      aria-label="Why TSC"
     >
-      <div className="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-[10%]">
-        <span 
-          className="font-black leading-none select-none"
-          style={{
-            fontSize: "clamp(12rem, 35vw, 40rem)",
-            color: "transparent",
-            WebkitTextStroke: "2px color-mix(in srgb, var(--color-text) 15%, transparent)",
-            letterSpacing: "-0.05em",
-            transform: "translateZ(0)",
-          }}
+      {/* ── BACKGROUND LAYERS ────────────────────────────── */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        {/* Depth gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(1200px_760px_at_15%_20%,color-mix(in_srgb,var(--color-accent)_5%,transparent),transparent_60%),radial-gradient(900px_700px_at_85%_80%,color-mix(in_srgb,var(--color-text)_3%,transparent),transparent_62%)]" />
+
+        {/* Engineering grid — static, no scroll animation (perf win) */}
+        <div
+          className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:radial-gradient(1000px_700px_at_50%_50%,black,transparent_85%)]"
+        />
+
+        {/* Diagonal accent line — subtle blueprint feel */}
+        <svg
+          className="absolute inset-0 h-full w-full opacity-[0.05]"
+          preserveAspectRatio="none"
+          viewBox="0 0 1000 1000"
+          fill="none"
         >
-          {item.number}
-        </span>
+          <line x1="0" y1="200" x2="1000" y2="800" stroke="currentColor" strokeWidth="0.5" className="text-text" strokeDasharray="4 8" />
+          <line x1="0" y1="800" x2="1000" y2="200" stroke="currentColor" strokeWidth="0.5" className="text-text" strokeDasharray="4 8" />
+        </svg>
       </div>
 
-      <div className="absolute left-0 lg:left-[5%] max-w-2xl w-full p-6 lg:p-10 pointer-events-auto">
-        <div 
-          className="rounded-3xl border border-border bg-surface/60 backdrop-blur-2xl shadow-2xl p-8 lg:p-12"
-          style={{
-            boxShadow: "0 25px 50px -12px color-mix(in srgb, var(--color-bg) 50%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-text) 10%, transparent)"
-          }}
-        >
-          <div className="flex items-center gap-4 mb-6">
-            <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-accent/10 text-accent font-mono text-xs font-bold border border-accent/20">
-              {item.number}
-            </span>
-            <div className="h-px flex-1 bg-gradient-to-r from-accent/40 to-transparent" />
+      {/* ── CONTENT ──────────────────────────────────────── */}
+      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+
+          {/* ════════════════════════════════════════════
+              LEFT — heading + technical visual
+              ════════════════════════════════════════════ */}
+          <motion.div
+            initial={reduce ? false : "initial"}
+            whileInView={reduce ? undefined : "enter"}
+            viewport={{ once: true, margin: "-80px" }}
+            variants={headerVariants}
+            className="lg:col-span-5 flex flex-col"
+          >
+            {/* Kicker */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="h-px w-8 bg-accent" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-accent">
+                {ui.kicker}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h2 className="font-black tracking-tight text-text leading-[1.02] text-4xl sm:text-5xl lg:text-[3.5rem]">
+              {ui.title1}
+              <br />
+              <span className="text-accent">{ui.title2}</span>
+            </h2>
+
+            {/* Engineering spec block — adds presence without ornament */}
+            <div className="mt-10 hidden lg:block">
+              <div className="relative rounded-2xl border border-border bg-surface/40 backdrop-blur-sm p-5 max-w-[320px]">
+                {/* Corner marks */}
+                <span className="absolute left-2 top-2 h-2.5 w-2.5 border-l border-t border-accent/60" />
+                <span className="absolute right-2 top-2 h-2.5 w-2.5 border-r border-t border-accent/60" />
+                <span className="absolute left-2 bottom-2 h-2.5 w-2.5 border-l border-b border-accent/60" />
+                <span className="absolute right-2 bottom-2 h-2.5 w-2.5 border-r border-b border-accent/60" />
+
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  <span className="font-mono text-[10px] tracking-[0.22em] text-accent/80 uppercase">
+                    {ui.specStamp}
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-2.5 font-mono text-[11px] text-muted">
+                  <SpecRow label="SCOPE" value="MEP · Integration · Service" />
+                  <SpecRow label="DELIVERY" value="Inspection-ready" />
+                  <SpecRow label="EXPERIENCE" value="17 years · 100+ projects" />
+                  <SpecRow label="REGION" value="Georgia" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ════════════════════════════════════════════
+              RIGHT — ledger of 4 pillars
+              ════════════════════════════════════════════ */}
+          <div className="lg:col-span-7">
+            <ul
+              role="list"
+              className="relative flex flex-col rounded-2xl border border-border bg-surface/30 backdrop-blur-sm overflow-hidden"
+            >
+              {pillars.map((p, i) => {
+                const isOpen = openIndex === i;
+                return (
+                  <motion.li
+                    key={p.number}
+                    custom={i}
+                    initial={reduce ? false : "initial"}
+                    whileInView={reduce ? undefined : "enter"}
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={rowVariants}
+                    className={[
+                      "relative border-b border-border/60 last:border-b-0",
+                      isOpen ? "bg-surface/40" : "",
+                    ].join(" ")}
+                  >
+                    {/* Row header — clickable */}
+                    <button
+                      onClick={() => toggle(i)}
+                      aria-expanded={isOpen}
+                      className="group flex w-full items-center gap-5 px-5 py-5 lg:px-7 lg:py-6 text-left transition-colors hover:bg-surface/50"
+                    >
+                      {/* Number */}
+                      <span className="font-mono text-xs text-accent/70 tracking-wider flex-shrink-0">
+                        {p.number}
+                      </span>
+
+                      {/* Vertical accent rail — present, intensifies when open */}
+                      <span
+                        className={[
+                          "h-6 w-px flex-shrink-0 transition-all duration-300",
+                          isOpen ? "bg-accent h-10" : "bg-border group-hover:bg-accent/40",
+                        ].join(" ")}
+                      />
+
+                      {/* Headline */}
+                      <span
+                        className={[
+                          "flex-1 text-base lg:text-[17px] font-semibold tracking-tight leading-snug transition-colors",
+                          isOpen ? "text-text" : "text-text/80 group-hover:text-text",
+                        ].join(" ")}
+                      >
+                        {p.headline}
+                      </span>
+
+                      {/* Indicator */}
+                      <motion.span
+                        animate={{ rotate: isOpen ? 45 : 0 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        className={[
+                          "flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md border transition-colors",
+                          isOpen
+                            ? "border-accent/40 bg-accent/[0.10] text-accent"
+                            : "border-border text-muted group-hover:border-accent/30 group-hover:text-accent",
+                        ].join(" ")}
+                      >
+                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                          <path
+                            d="M5.5 1V10 M1 5.5H10"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </motion.span>
+                    </button>
+
+                    {/* Expand panel */}
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          key="panel"
+                          variants={expandVariants}
+                          initial="collapsed"
+                          animate="expanded"
+                          exit="collapsed"
+                          className="overflow-hidden"
+                        >
+                          <div className="px-5 pb-6 pl-[3.25rem] lg:px-7 lg:pb-7 lg:pl-[4.5rem]">
+                            <p className="text-sm leading-[1.75] text-muted max-w-[58ch]">
+                              {p.body}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.li>
+                );
+              })}
+            </ul>
+
+            {/* Small caption below ledger */}
+            <p className="mt-3 font-mono text-[10px] text-muted/60 tracking-[0.2em] uppercase">
+              {lang === "en"
+                ? "Select a row for detail · " + pillars.length + " principles"
+                : "დააჭირეთ რიგს დეტალებისთვის · " + pillars.length + " პრინციპი"}
+            </p>
           </div>
-          
-          <h3 className={`text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-6 ${item.accent ? "text-accent" : "text-text"}`}>
-            {item.headline}
-          </h3>
-          
-          <p className="text-base lg:text-lg leading-relaxed text-muted font-medium">
-            {item.body}
-          </p>
         </div>
+
+        {/* ════════════════════════════════════════════
+            CTA — preserved from old section, simplified
+            ════════════════════════════════════════════ */}
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 20 }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="mt-16 lg:mt-20"
+        >
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-surface/60 backdrop-blur-xl p-8 lg:p-12">
+
+            {/* Subtle internal grid */}
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-[0.10] pointer-events-none"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-text) 1px, transparent 1px), linear-gradient(to bottom, var(--color-text) 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
+                maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+                WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+              }}
+            />
+
+            {/* Top accent line */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+
+            <div className="relative z-10 flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+              <div className="flex-1 max-w-2xl">
+                <h3 className="text-2xl lg:text-3xl font-black tracking-tight text-text mb-3">
+                  {ui.ctaTitle}
+                </h3>
+                <p className="text-sm lg:text-base text-muted leading-relaxed">
+                  {ui.ctaBody}
+                </p>
+              </div>
+
+              <Link
+                href={`/${lang}/contact`}
+                className="group relative inline-flex items-center justify-center gap-3 rounded-xl bg-gradient-to-b from-accent to-accent2 border border-accent/40 px-6 py-3.5 text-sm font-bold text-white transition-all hover:scale-[1.02] active:scale-95 shadow-[0_4px_20px_color-mix(in_srgb,var(--color-accent)_30%,transparent)] overflow-hidden flex-shrink-0"
+              >
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+                <span className="relative z-10">{ui.ctaButton}</span>
+                <span className="relative z-10 transition-transform group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </section>
   );
 }
 
-// ── MAIN COMPONENT ──
-export default function WhyTSCSection({ lang = "en" }: { lang?: Lang }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = useReducedMotion();
-  const statements = STATEMENTS[lang];
-  
-  const totalSteps = statements.length + 1;
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const activeIndexFloat = useTransform(scrollYProgress, [0, 1], [0, totalSteps - 1]);
-
-  // ── CALL FINAL CTA HOOKS AT TOP LEVEL ──
-  const ctaIndex = statements.length;
-  const ctaProgress = useTransform(activeIndexFloat, (v) => v - ctaIndex);
-  
-  const ctaScale = useTransform(ctaProgress, [-1, -0.3, 0], [0.6, 1, 1]);
-  // Resting at 12vh pushes the container down to create a gap from the fixed header
-  const ctaY = useTransform(ctaProgress, [-1, -0.3, 0], ["40vh", "12vh", "12vh"]);
-  const ctaOpacity = useTransform(ctaProgress, [-1, -0.3, -0.1, 0], [0, 0, 1, 1]);
-  const ctaBlur = useTransform(ctaProgress, [-1, -0.3, 0], ["blur(12px)", "blur(0px)", "blur(0px)"]);
-
+/* ─────────────────────────────────────────────────────────
+   SpecRow — small mono key/value pair for the spec card
+   ───────────────────────────────────────────────────────── */
+function SpecRow({ label, value }: { label: string; value: string }) {
   return (
-    <section ref={containerRef} className="relative bg-bg" style={{ height: `${totalSteps * 150}vh` }}>
-      
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-        
-        {/* Animated Engineering Grid Background */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Depth gradients */}
-          <div className="absolute inset-0 bg-[radial-gradient(1200px_760px_at_18%_10%,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_60%),radial-gradient(980px_720px_at_86%_18%,color-mix(in_srgb,var(--color-text)_4%,transparent),transparent_62%)]" />
-          
-          {/* BIG grid */}
-          <div
-            className={`absolute -inset-24 opacity-60 dark:opacity-40 [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(920px_620px_at_50%_26%,black,transparent_88%)] ${reduceMotion ? "" : "animate-[gridPan_12s_linear_infinite]"}`}
-          />
-
-          {/* MICRO grid */}
-          <div
-            className={`absolute -inset-24 opacity-40 dark:opacity-20 [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:14px_14px] [mask-image:radial-gradient(920px_620px_at_50%_26%,black,transparent_88%)] ${reduceMotion ? "" : "animate-[gridPan_18s_linear_infinite_reverse]"}`}
-          />
-
-          <style>{`
-            @keyframes gridPan {
-              0% { transform: translate3d(0px, 0px, 0); }
-              100% { transform: translate3d(56px, 0px, 0); }
-            }
-          `}</style>
-        </div>
-
-        {/* Ambient Glow */}
-        <div 
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 60%)" }}
-        />
-
-        <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-12 h-full flex flex-col justify-center">
-          
-          {/* Static Header */}
-          <div className="absolute top-12 lg:top-24 left-6 lg:left-12 right-6 lg:right-12 z-40 flex justify-between items-start pointer-events-none">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-1 w-8 rounded-full bg-accent" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
-                  {lang === "en" ? "Why TSC" : "რატომ TSC"}
-                </span>
-              </div>
-              <h2 className="font-black tracking-tight text-text leading-[1.05] drop-shadow-lg" style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}>
-                {lang === "en" ? "Built different." : "ზუსტი მიდგომა."}
-                <br />
-                <span className="text-accent">{lang === "en" ? "Delivered right." : "უნაკლო ჩაბარება."}</span>
-              </h2>
-            </div>
-          </div>
-
-          {/* ── KINETIC 3D LAYERS ── */}
-          <div className="relative w-full h-[60vh] flex items-center justify-center mt-12">
-            
-            {statements.map((item, i) => (
-              <StatementLayer 
-                key={item.number} 
-                item={item} 
-                index={i} 
-                activeIndexFloat={activeIndexFloat} 
-              />
-            ))}
-
-            {/* ── SLIDE 5: THE COMPACT FINAL CTA ── */}
-            <motion.div
-              className="absolute inset-0 flex items-center justify-center pointer-events-none"
-              style={{ scale: ctaScale, opacity: ctaOpacity, y: ctaY, filter: ctaBlur, zIndex: 20 }}
-            >
-              {/* Subtle backdrop */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-20">
-                 <div className="w-[60vw] h-[60vw] max-w-[500px] max-h-[500px] bg-accent blur-[100px] rounded-full mix-blend-screen" />
-              </div>
-
-              <div className="relative w-full max-w-2xl px-6 pointer-events-auto">
-                <div 
-                  className="relative overflow-hidden rounded-3xl border border-border bg-surface/80 backdrop-blur-3xl p-8 lg:p-12 text-center shadow-2xl"
-                >
-                  {/* Internal micro-grid for the CTA box */}
-                  <div 
-                    className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, var(--color-text) 1px, transparent 1px), linear-gradient(to bottom, var(--color-text) 1px, transparent 1px)`,
-                      backgroundSize: '24px 24px',
-                      maskImage: 'radial-gradient(ellipse at center, black 20%, transparent 80%)',
-                      WebkitMaskImage: 'radial-gradient(ellipse at center, black 20%, transparent 80%)'
-                    }}
-                  />
-                  
-                  {/* Subtle top/bottom structural lines */}
-                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
-                  <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-                  
-                  <h3 className="relative z-10 text-3xl lg:text-5xl font-black tracking-tight text-text mb-4">
-                    {lang === "en" ? "Ready for engineered" : "საინჟინრო სიზუსტე თქვენი"}{" "}
-                    <span className="text-accent">{lang === "en" ? "precision?" : "პროექტისთვის"}</span>
-                  </h3>
-                  
-                  <p className="relative z-10 text-base text-muted font-medium mb-8 max-w-lg mx-auto">
-                    {lang === "en" 
-                      ? "Stop guessing. Start engineering. Schedule a site visit, define the scope, and receive a complete proposal—no commitment required." 
-                      : "ნუ დახარჯავთ რესურსებს ვარაუდებზე. დაგეგმეთ ვიზიტი ობიექტზე და მიიღეთ ზუსტი საინჟინრო გადაწყვეტა უფასო კონსულტაციის ფარგლებში."}
-                  </p>
-
-                  <div className="flex justify-center relative z-10">
-                    <Link
-                      href={`/${lang}/contact`}
-                      className="group relative inline-flex items-center justify-center gap-3 rounded-xl bg-gradient-to-b from-accent to-accent2 border border-accent/40 px-6 py-3 text-sm font-bold text-white transition-all hover:scale-[1.02] active:scale-95 shadow-[0_4px_20px_color-mix(in_srgb,var(--color-accent)_30%,transparent)] overflow-hidden"
-                    >
-                      {/* Metallic sheen overlay */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
-                      
-                      {/* Sweep animation */}
-                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-[tsc-btn-sweep_2s_infinite_ease-in-out]" />
-                      
-                      <span className="relative z-10">{lang === "en" ? "Start a Conversation" : "დაგვიკავშირდით"}</span>
-                      <span className="relative z-10 transition-transform group-hover:translate-x-1">→</span>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="flex items-center gap-3">
+      <span className="text-muted/60 w-20 flex-shrink-0">{label}</span>
+      <span className="h-px flex-1 bg-border/60" />
+      <span className="text-text/80">{value}</span>
+    </div>
   );
 }
