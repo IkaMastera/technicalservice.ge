@@ -19,13 +19,13 @@ const PILLARS = {
     },
     {
       number: "02",
-      headline: "Documentation is part of delivery.",
-      body: "Drawings, test records, and commissioning files leave with the building owner. A system without documentation is a liability, not an asset.",
+      headline: "Engineered for operational reality.",
+      body: "Built for long-term lifecycle performance. Our systems are designed to minimize energy consumption, reduce maintenance overhead, and operate flawlessly under peak loads.",
     },
     {
       number: "03",
-      headline: "Integration over coordination.",
-      body: "Fire, mechanical, electrical, and BMS designed to function as one system — not four contractors meeting on-site. Single point of accountability.",
+      headline: "Unified infrastructure by design.",
+      body: "Mechanical, electrical, fire protection, and automated BMS are engineered from day one to function as a singular, intelligent ecosystem. By consolidating all disciplines, we guarantee seamless performance and absolute accountability.",
     },
     {
       number: "04",
@@ -36,23 +36,23 @@ const PILLARS = {
   ka: [
     {
       number: "01",
-      headline: "დიზაინიდან მომსახურებამდე. ერთი მთლიანი სამუშაო.",
-      body: "MEP სისტემებს ვაპროექტებთ, ვამონტაჟებთ და ვემსახურებით ერთიანი მთლიანი სამუშაოს ფარგლებში. გუნდი, რომელმაც სისტემა დააპროექტა, არის იგივე გუნდი, რომელიც მის ჩაბარებას და მომდევნო ათი წლის მომსახურებას უზრუნველყოფს.",
+      headline: "სრული საინჟინრო ციკლი. ერთი პასუხისმგებლობა.",
+      body: "ჩვენ ვუზრუნველყოფთ MEP სისტემების პროექტირებას, მონტაჟსა და მომსახურებას როგორც ერთ, უწყვეტ პროცესს. გუნდი, რომელიც ქმნის ნახაზს, თავად რთავს სისტემას ექსპლუატაციაში და უწევს მას ტექნიკურ ზედამხედველობას მომდევნო ათი წლის განმავლობაში.",
     },
     {
       number: "02",
-      headline: "დოკუმენტაცია ჩაბარების ნაწილია.",
-      body: "ნახაზები, ტესტირების ჩანაწერები და ჩაბარების ფაილები რჩება შენობის მფლობელთან. დოკუმენტაცის გარეშე სისტემა აქტივი კი არა, ვალდებულებაა.",
+      headline: "გათვლილი რეალურ დატვირთვაზე.",
+      body: "სისტემები შექმნილია გრძელვადიანი და სტაბილური მუშაობისთვის. მინიმალური ენერგოდანახარჯი, გამარტივებული მოვლა და შეუფერხებელი ფუნქციონირება პიკური დატვირთვის დროს.",
     },
     {
       number: "03",
-      headline: "ინტეგრაცია კოორდინაციის ნაცვლად.",
-      body: "სახანძრო, მექანიკური, ელექტრო და BMS დაპროექტებულია ერთიან სისტემად — და არა ოთხი ცალკეული კონტრაქტორის შეხვედრად ობიექტზე. ერთიანი პასუხისმგებლობა.",
+      headline: "ერთიანი, სინქრონიზებული ინფრასტრუქტურა.",
+      body: "სახანძრო, მექანიკური, ელექტრო და ავტომატიზაციის (BMS) სისტემები საწყის ეტაპზევე იქმნება, როგორც ერთიანი ინტელექტუალური ეკოსისტემა. ყველა მიმართულების გაერთიანებით, ჩვენ ვუზრუნველყოფთ უწყვეტ ფუნქციონირებას და ვიღებთ აბსოლუტურ პასუხისმგებლობას მუშაობის ხარისხზე.",
     },
     {
       number: "04",
-      headline: "17 წელი რეალურ პროექტებზე.",
-      body: "სასტუმროები, ტაუერები, სავაჭრო ცენტრები, სკოლები, ისტორიული ობიექტები. შეზღუდვებით სავსე შენობები, სადაც ვარაუდი დასაშვები არ არის. პრაქტიკული გამოცდილება თეორიის ნაცვლად.",
+      headline: "17 წელი რთულ ობიექტებზე.",
+      body: "სასტუმროები, ცათამბჯენები, სავაჭრო ცენტრები, სკოლები და ისტორიული ძეგლები. ჩვენ ვმუშაობთ სპეციფიკური შეზღუდვების მქონე შენობებზე, სადაც ვარაუდით მოქმედება დაუშვებელია. ჩვენი საყრდენი რეალური პრაქტიკაა და არა მხოლოდ თეორია.",
     },
   ],
 };
